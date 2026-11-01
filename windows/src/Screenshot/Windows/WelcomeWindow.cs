@@ -20,7 +20,7 @@ internal sealed class WelcomeWindow : Window
         Title = "Welcome to Screenshotz";
         Width = 540;
         Height = 400;
-        ResizeMode = ResizeMode.NoResize;
+        ResizeMode = ResizeMode.CanMinimize; // minimise, no maximise; fixed size (DESIGN §7)
         WindowStartupLocation = WindowStartupLocation.CenterScreen;
         Icon = AppAssets.Icon;
 

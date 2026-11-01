@@ -98,9 +98,7 @@ How the app **looks**. The apps use each platform's own controls, fonts and colo
 ## 7. Welcome window
 
 - **540 × 400**, centred, title "Welcome to Screenshotz".
-- Not resizable.
-  - macOS: closable and minimisable.
-  - Windows: closable only.
+- Not resizable. Closable and minimisable on both platforms (no maximise).
 - Side margins **28**, top **26**.
 - Content, top to bottom:
   1. Headline "A screenshot. In two places." (26 semibold).
