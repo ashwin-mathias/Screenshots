@@ -38,6 +38,7 @@ internal sealed class AppController : IDisposable
     private Window? _menuHost;
     private MenuItem? _recentMenu;
     private DateTime _menuClosedAt;
+    private bool _menuOpening;
 
     private string _status = Strings.Ready;
     private bool _busy;
@@ -183,7 +184,8 @@ internal sealed class AppController : IDisposable
             Int32Rect? selection;
             try { selection = await _overlay.SelectAsync(); }
             finally { _overlay = null; }
-            if (previous != 0 && Native.IsWindow(previous)) Native.SetForegroundWindow(previous);
+            var menuHost = _menuHost is null ? 0 : new System.Windows.Interop.WindowInteropHelper(_menuHost).Handle;
+            if (previous != 0 && previous != menuHost && Native.IsWindow(previous)) Native.SetForegroundWindow(previous);
             if (_quitting) return;
             if (selection is not { } rect)
             {
@@ -387,10 +389,16 @@ internal sealed class AppController : IDisposable
 
     private async Task ShowMenuAsync()
     {
-        if (_menu is { IsOpen: true }) return;
+        if (_menuOpening || _menu is { IsOpen: true }) return; // a click can arrive as two tray events
         if (DateTime.UtcNow - _menuClosedAt < TimeSpan.FromMilliseconds(300)) return; // the click that closed it
-        _ = RefreshRecentAsync();
-        var login = await LoginItem.GetStateAsync();
+        _menuOpening = true;
+        LoginItem.State login;
+        try
+        {
+            _ = RefreshRecentAsync();
+            login = await LoginItem.GetStateAsync();
+        }
+        finally { _menuOpening = false; }
 
         _menu = BuildMenu(login);
         _menuHost ??= new Window

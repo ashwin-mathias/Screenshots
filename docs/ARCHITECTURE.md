@@ -37,12 +37,17 @@ macos/
   scripts/build-app.sh, test.sh, preview-check.sh
 windows/
   Screenshot.sln
-  src/CaptureSupport/       CaptureStore, FileNaming, RecentCaptures, Thumbnailer, Version, UpdateFeed, ClipboardWriter
-  src/Screenshot/           App, TrayController, MenuBuilder, CaptureController, HotkeyManager,
-                            SelectionOverlay, ScreenGrabber, PreviewWindow, WelcomeWindow,
-                            HelpAboutWindow, StartupTaskController, Settings, Updater, UpdateInstaller
-  tests/CaptureSupport.Tests/
-  packaging/AppxManifest.xml, Images/
+  src/CaptureSupport/       (net10.0, runs anywhere) FileNaming, CaptureStore, CapturePipeline,
+                            RecentCaptures, AppVersion, UpdateFeed, ChecksumFile, MsixInspector
+  src/CaptureSupport.Windows/ (WPF imaging) WicImageDecoder, Thumbnailer, PngEncoding,
+                            ClipboardPayload + DibV5Format, ImageCopier, Win32Clipboard
+  src/Screenshot/           App, AppController (menu, shortcuts, capture flow, update prompts)
+    Interop/                Native (P/Invoke), MessageHost, TrayIcon, HotkeyManager, Screens, Theme
+    Services/               Settings + Log, Strings, AppInfo, LoginItem, FileActions, Updater
+    Windows/                SelectionOverlay, PreviewWindow, WelcomeWindow, HelpAboutWindow, AlertWindow
+  tests/CaptureSupport.Tests/          (net10.0: shared cases, store, recents, updates, pipeline)
+  tests/CaptureSupport.Windows.Tests/  (Windows only: WIC, clipboard payload, thumbnails)
+  packaging/AppxManifest.xml
   scripts/build-msix.ps1
 tools/make-icons.py         generates shared/assets/icon/*
 tools/make-certs.sh         creates the signing certificates and secrets (SIGNING.md)
@@ -56,30 +61,30 @@ tools/make-certs.sh         creates the signing certificates and secrets (SIGNIN
 |---|---|---|
 | Language | Swift 5.9+ (language mode 5) | C# 13 |
 | Toolchain | Xcode 16 / SwiftPM (`swift-tools-version: 5.9`) | .NET 10 SDK (LTS) |
-| UI | AppKit | WPF with the Fluent theme (`ThemeMode="System"`), plus WinForms `NotifyIcon` for the tray only |
+| UI | AppKit | WPF with the Fluent theme (`ThemeMode="System"`); the tray icon uses `Shell_NotifyIcon` directly (no WinForms) |
 | Target | macOS 13.0, universal (`arm64` + `x86_64`) | `net10.0-windows10.0.22621.0`, `win-x64`, self-contained |
-| System APIs | AppKit, Carbon (hotkeys), CoreGraphics (permission), ImageIO, ServiceManagement, Security (signatures), Foundation | Win32 via **CsWin32** (build-time source generator from Microsoft), WinRT via the Windows SDK projection (`PackageManager`, `StartupTask`), WIC / `System.Windows.Media.Imaging` |
+| System APIs | AppKit, Carbon (hotkeys), CoreGraphics (permission), ImageIO, ServiceManagement, Security (signatures), Foundation | Win32 via hand-written P/Invoke (`Interop/Native.cs`), WinRT via the Windows SDK projection (`PackageManager`, `StartupTask`), WIC / `System.Windows.Media.Imaging`. One Microsoft package at run time: `System.Security.Cryptography.Pkcs` (reads the update's signature) |
 | External tools | `/usr/sbin/screencapture`, `/usr/bin/ditto`, `/usr/bin/codesign`, Preview.app | Paint (via the PNG "edit" verb), File Explorer |
-| Tests | XCTest (`swift test`) | MSTest (`dotnet test`) |
+| Tests | XCTest (`swift test`) | MSTest (`dotnet test`); the platform-neutral tests also run on macOS and Linux |
 
 ## 4. Components
 
 | Responsibility | macOS | Windows |
 |---|---|---|
-| Entry, single instance, lifecycle | `AppDelegate` | `App` (mutex + registered window message) |
-| Menu and status | `MenuController` (NSStatusItem + NSMenu) | `TrayController` (NotifyIcon) + `MenuBuilder` (WPF ContextMenu) |
-| Capture state machine | `CaptureController` (runs `screencapture`) | `CaptureController` (runs `ScreenGrabber` + `SelectionOverlay`) |
-| Shortcuts | `GlobalShortcut` (Carbon) | `HotkeyManager` (`RegisterHotKey` on a message-only window) |
+| Entry, single instance, lifecycle | `AppDelegate` | `App` (mutex) + `MessageHost` (hidden top-level window; finds and signals the running copy) |
+| Menu and status | `MenuController` (NSStatusItem + NSMenu) | `TrayIcon` (Shell_NotifyIcon) + `AppController` (WPF ContextMenu) |
+| Capture state machine | `CaptureController` (runs `screencapture`) | `AppController.CaptureAsync` (`Screens.Grab` + `SelectionOverlay` + `CapturePipeline`) |
+| Shortcuts | `GlobalShortcut` (Carbon) | `HotkeyManager` (`RegisterHotKey` on the hidden host window) |
 | Permission | `PermissionController` | — |
-| Launch at login | `LoginItemController` (SMAppService) | `StartupTaskController` (StartupTask) |
+| Launch at login | `LoginItemController` (SMAppService) | `LoginItem` (StartupTask) |
 | Save, validate, name | `CaptureStore`, `FileNaming` | `CaptureStore`, `FileNaming` |
-| Clipboard | `CaptureStore.copy(to: NSPasteboard)` | `ClipboardWriter` (behind `IClipboard` so tests use a fake) |
+| Clipboard | `CaptureStore.copy(to: NSPasteboard)` | `ImageCopier` → `ClipboardPayload` → `Win32Clipboard` (behind `IClipboardSink` so tests use a fake) |
 | Recents | `RecentCaptures` | `RecentCaptures` |
 | Thumbnail decode | `Thumbnailer` (ImageIO) | `Thumbnailer` (WIC) |
 | Preview | `PreviewController` (NSPanel) | `PreviewWindow` |
 | Help / Welcome | `HelpAboutWindow`, `WelcomeWindow` | same names |
 | Update check | `UpdateFeed` (parse, compare, validate URLs) + `Updater` (timer, prompt, download) | same |
-| Update install | `UpdateInstaller` (verify, helper script) | `UpdateInstaller` (verify, PackageManager) |
+| Update install | `UpdateInstaller` (verify, helper script) | `Updater.InstallAsync` (checksum, `MsixInspector` signer pin, PackageManager) |
 
 **Test seams:** the support libraries take the date, UUID, folder, clipboard, HTTP client and file system from outside, so tests can control them. CAP-007 and the update failure paths are tested by passing in a failing clipboard or HTTP client.
 
@@ -146,20 +151,20 @@ tools/make-certs.sh         creates the signing certificates and secrets (SIGNIN
 ### Windows
 - **`pwsh windows/scripts/build-msix.ps1`:**
   1. `dotnet publish src/Screenshot -c Release -r win-x64 --self-contained -p:PublishSingleFile=false`.
-  2. Copy `AppxManifest.xml`, with the version filled in, plus the logo images into the publish folder.
+  2. Copy `AppxManifest.xml`, with the version filled in, plus the scale-200 logos as `Images/<name>.png` (no resource index, so no scale or theme variants yet).
   3. `makeappx pack /d <folder> /p dist/Screenshot-win-x64.msix`.
   4. `signtool sign /fd SHA256 /f <pfx> /p <password> /tr http://timestamp.digicert.com /td SHA256`.
      - Without the certificate, the package is left unsigned for local testing, with a warning.
-  5. `signtool verify /pa`.
+  5. `signtool verify /pa` (CI trusts the public certificate on the throwaway runner first), then write `<msix>.sha256` and `Screenshot-signing.cer`.
 - **AppxManifest.xml:**
   - `Identity Name="AshwinMathias.Screenshot" Publisher="CN=Ashwin Mathias" Version="X.Y.Z.0" ProcessorArchitecture="x64"`;
   - `DisplayName` "Screenshot", `PublisherDisplayName` "Ashwin Mathias";
   - `TargetDeviceFamily Windows.Desktop MinVersion="10.0.22000.0"`;
   - capability `runFullTrust`;
-  - `uap:VisualElements` with the logos (Square44x44, Square150x150, Wide310x150, StoreLogo), `AppListEntry="default"`;
+  - `uap:VisualElements` with the logos (Square44x44, Square150x150, Wide310x150, StoreLogo);
   - extension `desktop:StartupTask TaskId="ScreenshotStartup" Enabled="false" DisplayName="Screenshot"`.
 - **App manifest (`app.manifest`):** `PerMonitorV2` DPI awareness; `asInvoker`.
-- **Certificate pin:** the build passes the Windows certificate thumbprint (`WINDOWS_CERT_THUMBPRINT`) into a generated constant used by UPD-004. Local unsigned builds get an empty pin, so they never accept updates.
+- **Certificate pin:** the build passes the Windows certificate thumbprint (`WINDOWS_CERT_THUMBPRINT`) as `-p:WindowsCertThumbprint`, stored as assembly metadata and read by UPD-004. Local unsigned builds get an empty pin, so they never accept updates.
 - The MSIX version is `X.Y.Z.0`. The build number appears only in the About text, read from an assembly attribute.
 
 ## 8. Signing, CI and releases

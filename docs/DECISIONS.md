@@ -56,3 +56,4 @@ Why the app is the way it is. Read this before changing behaviour, so settled qu
 6. **CI errors are invisible without annotations.** Keep the `::error::` steps.
 7. **Hard-coded Documents paths break with OneDrive.** Always ask Windows for the Documents known folder.
 8. **OpenSSL 3's default `.p12` encryption (AES) can't be imported on some macOS versions.** Export with `-keypbe PBE-SHA1-3DES -certpbe PBE-SHA1-3DES -macalg sha1`, and check the result.
+9. **A message-only window (HWND_MESSAGE) never receives broadcasts** such as `WM_SETTINGCHANGE` or `TaskbarCreated`. The Windows host window is a hidden top-level window, so theme changes and Explorer restarts reach it.

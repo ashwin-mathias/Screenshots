@@ -22,8 +22,8 @@ If anything is unclear, follow the spec's wording and list the question in your 
 Don't invent new behaviour.
 
 ## Hard requirements
-- No third-party runtime libraries. Windows may use only Microsoft build/test packages
-  (CsWin32, MSTest, Windows SDK projection).
+- No third-party libraries. Windows may use only Microsoft packages: MSTest (tests),
+  System.Security.Cryptography.Pkcs, and the Windows SDK projection. Win32 calls are hand-written P/Invoke.
 - Save first, then copy (CAP-006). Never overwrite (STO-004). Never claim success early.
 - Both apps must pass the same JSON cases in shared/testcases/. When behaviour changes, change the case file first.
 - The preview must never take keyboard focus (PRE-001).
