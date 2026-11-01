@@ -153,7 +153,7 @@ tools/make-certs.sh         creates the signing certificates and secrets (SIGNIN
 
   | | Store build (`-Channel store`) | Test build (`-Channel test`, default) |
   |---|---|---|
-  | Identity | `AshwinMathias.Screenshotz`, `CN=7E8438D5-12B0-4FC0-9098-FE994BBCE149` | `AshwinMathias.Screenshot`, `CN=Ashwin Mathias` |
+  | Identity | `AshwinMathias.Screenshotz`, `CN=7E8438D5-12B0-4FC0-9098-FE994BBCE149` | `AshwinMathias.ScreenshotzTest`, `CN=Ashwin Mathias` |
   | Signed by | Microsoft, after upload (left unsigned) | our self-signed certificate |
   | Output | `dist/Screenshotz-store-x64.msixupload` (a zip that holds the `.msix`) | `dist/Screenshotz-win-x64.msix` + `.sha256` + `Screenshotz-signing.cer` |
   | Updates | Microsoft Store (UPD-007); updater code never runs | in-app updater from GitHub releases |
@@ -167,7 +167,7 @@ tools/make-certs.sh         creates the signing certificates and secrets (SIGNIN
      - Without the certificate, the package is left unsigned for local testing, with a warning.
   5. `signtool verify /pa` (CI trusts the public certificate on the throwaway runner first), then write `<msix>.sha256` and `Screenshotz-signing.cer`.
 - **AppxManifest.xml:**
-  - `Identity Name="AshwinMathias.Screenshot" Publisher="CN=Ashwin Mathias" Version="X.Y.Z.0" ProcessorArchitecture="x64"`;
+  - `Identity Name` / `Publisher` per channel (table above), `Version="X.Y.Z.0" ProcessorArchitecture="x64"`;
   - `DisplayName` "Screenshotz", `PublisherDisplayName` "Ashwin Mathias";
   - `TargetDeviceFamily Windows.Desktop MinVersion="10.0.22000.0"`;
   - capability `runFullTrust`;

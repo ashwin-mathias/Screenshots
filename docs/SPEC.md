@@ -39,7 +39,7 @@ Words used:
 | Minimum OS | macOS 13 Ventura | Windows 11 (any supported release) |
 | Architectures | Universal: Apple silicon + Intel | x64 only (ARM64 later) |
 | Where the app lives | Menu bar (no Dock icon) | System tray (no taskbar button) |
-| App ID | Bundle ID `local.ashwinmathias.Screenshot` | **Store:** `AshwinMathias.Screenshotz`, publisher `CN=7E8438D5-12B0-4FC0-9098-FE994BBCE149`, family name `AshwinMathias.Screenshotz_gg9r6ndhn3xw6`, Store ID `9NM6DV5TJJ6C`. **Test builds:** `AshwinMathias.Screenshot`, publisher `CN=Ashwin Mathias` |
+| App ID | Bundle ID `local.ashwinmathias.Screenshot` | **Store:** `AshwinMathias.Screenshotz`, publisher `CN=7E8438D5-12B0-4FC0-9098-FE994BBCE149`, family name `AshwinMathias.Screenshotz_gg9r6ndhn3xw6`, Store ID `9NM6DV5TJJ6C`. **Test builds:** `AshwinMathias.ScreenshotzTest`, publisher `CN=Ashwin Mathias` |
 | Delivered as | `Screenshotz-mac.zip` containing `Screenshotz.app` | **Microsoft Store** (the "Store build"). Test builds: `Screenshotz-win-x64.msix` |
 | Signed with | Self-signed code-signing certificate (§14) | Store build: signed by Microsoft. Test builds: self-signed certificate (§14) |
 | Updates | In-app updater (§13) | Store build: the Microsoft Store (§13, UPD-007). Test builds: the in-app updater, from `Screenshotz-win-x64.msix` on GitHub releases |
@@ -533,7 +533,7 @@ UPD-001 to UPD-006 describe the **in-app updater**, used by the **macOS app** an
      - **Windows:**
        - the package's Authenticode signature must be valid;
        - the signer certificate's thumbprint must equal the thumbprint built into the app (§14);
-       - the package identity name must be `AshwinMathias.Screenshot`.
+       - the package identity name must be `AshwinMathias.ScreenshotzTest` (the test build's own identity).
   3. The version inside the download equals the offered version.
 - If any check fails:
   - delete the download;

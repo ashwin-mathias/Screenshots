@@ -130,7 +130,7 @@ internal sealed class Updater : IDisposable
             catch (MsixInspectionException e) { throw new UpdateException($"{Strings.UpdateUnsafe} {e.Message}"); }
             if (info.SignerThumbprint != AppInfo.CertThumbprint)
                 throw new UpdateException($"{Strings.UpdateUnsafe} It isn't signed with Screenshotz's certificate.");
-            if (info.Name != "AshwinMathias.Screenshot" || info.Publisher != "CN=Ashwin Mathias")
+            if (info.Name != "AshwinMathias.ScreenshotzTest" || info.Publisher != "CN=Ashwin Mathias")
                 throw new UpdateException($"{Strings.UpdateUnsafe} It's a different app.");
             if (info.Version != $"{offer.Version}.0")
                 throw new UpdateException($"{Strings.UpdateUnsafe} It contains version {info.Version}, not {offer.Version}.");
