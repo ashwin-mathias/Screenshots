@@ -6,7 +6,10 @@ param(
     [string]$BuildNumber = "0",
     [string]$PfxPath = "",
     [string]$PfxPassword = "",
-    [string]$Thumbprint = ""
+    [string]$Thumbprint = "",
+    # Diagnostics only (R2): install the same app under another package name, optionally without the startup task.
+    [string]$DiagName = "",
+    [switch]$NoStartupTask
 )
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
@@ -16,14 +19,16 @@ $identity = @{
     test  = @{ Name = 'AshwinMathias.Screenshot';  Publisher = 'CN=Ashwin Mathias' }
     store = @{ Name = 'AshwinMathias.Screenshotz'; Publisher = 'CN=7E8438D5-12B0-4FC0-9098-FE994BBCE149' }
 }[$Channel]
+if ($DiagName -ne '') { $identity = @{ Name = $DiagName; Publisher = $identity.Publisher } }
 
 $windows = Split-Path -Parent $PSScriptRoot
 $repo = Split-Path -Parent $windows
 $version = (Get-Content (Join-Path $repo 'VERSION') -Raw).Trim()
 if ($version -notmatch '^\d+\.\d+\.\d+$') { throw "VERSION must be X.Y.Z, found '$version'." }
-$out = Join-Path $windows "out/$Channel"
+$folder = if ($DiagName -ne '') { "diag/$DiagName" } else { $Channel }
+$out = Join-Path $windows "out/$folder"
 $publish = Join-Path $out 'publish'
-$dist = Join-Path $windows "dist/$Channel"
+$dist = Join-Path $windows "dist/$folder"
 $msixName = if ($Channel -eq 'store') { 'Screenshotz-store-x64.msix' } else { 'Screenshotz-win-x64.msix' }
 $msix = Join-Path $dist $msixName
 Remove-Item $out, $dist -Recurse -Force -ErrorAction SilentlyContinue
@@ -42,6 +47,7 @@ if ($LASTEXITCODE -ne 0) { throw 'dotnet publish failed.' }
 # 2. Manifest and logos.
 $manifest = (Get-Content (Join-Path $windows 'packaging/AppxManifest.xml') -Raw).
     Replace('__VERSION__', "$version.0").Replace('__NAME__', $identity.Name).Replace('__PUBLISHER__', $identity.Publisher)
+if ($NoStartupTask) { $manifest = [regex]::Replace($manifest, '(?s)\s*<Extensions>.*?</Extensions>', '') }
 Set-Content -Path (Join-Path $publish 'AppxManifest.xml') -Value $manifest -Encoding utf8
 $images = Join-Path $publish 'Images'
 New-Item -ItemType Directory -Force $images | Out-Null
