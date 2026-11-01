@@ -58,3 +58,4 @@ Why the app is the way it is. Read this before changing behaviour, so settled qu
 7. **Hard-coded Documents paths break with OneDrive.** Always ask Windows for the Documents known folder.
 8. **OpenSSL 3's default `.p12` encryption (AES) can't be imported on some macOS versions.** Export with `-keypbe PBE-SHA1-3DES -certpbe PBE-SHA1-3DES -macalg sha1`, and check the result.
 9. **A message-only window (HWND_MESSAGE) never receives broadcasts** such as `WM_SETTINGCHANGE` or `TaskbarCreated`. The Windows host window is a hidden top-level window, so theme changes and Explorer restarts reach it.
+10. **An MSIX needs a real `resources.pri` and no stray language folders.** Without one, Windows indexes the package at install time; .NET's satellite folders (`de/`, `ja/` …) or a stray `priconfig.xml` then fail the install with 0x80070490. Build the index with `makepri` (config file outside the package) and set `SatelliteResourceLanguages=en`.

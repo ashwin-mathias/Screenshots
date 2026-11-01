@@ -122,4 +122,6 @@ Safety while testing:
 
 ## R. Regression tests
 
-(None yet. Add one row for every bug fixed: `R1 (0.5.x) — what broke — how to check it.`)
+- [ ] R1 (0.5.0, test build 5) — Installing the `.msix` failed with 0x80070490 ("element not found"). The package had WPF's language folders (`cs/`, `de/`, …) and no `resources.pri`, so Windows' install-time resource indexing failed. Check: the package has `resources.pri`, no language folders and no `priconfig.xml`, and it installs on a clean PC.
+
+(Add one row for every bug fixed: `R# (version) — what broke — how to check it.`)

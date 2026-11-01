@@ -12,6 +12,8 @@
     <Platforms>x64</Platforms>
     <!-- WPF's Fluent ThemeMode is marked experimental. -->
     <NoWarn>$(NoWarn);WPF0001</NoWarn>
+    <!-- English only: no cs/, de/, ja/ … satellite folders. Inside an MSIX they read as language variants (0x80070490 on install). -->
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <Channel Condition="'$(Channel)' == ''">test</Channel>
   </PropertyGroup>
 

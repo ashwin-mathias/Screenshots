@@ -160,7 +160,8 @@ tools/make-certs.sh         creates the signing certificates and secrets (SIGNIN
 
 - **`pwsh windows/scripts/build-msix.ps1`:**
   1. `dotnet publish src/Screenshot -c Release -r win-x64 --self-contained -p:PublishSingleFile=false`.
-  2. Copy `AppxManifest.xml`, with the version filled in, plus the scale-200 logos as `Images/<name>.png` (no resource index, so no scale or theme variants yet).
+  2. Copy `AppxManifest.xml`, with the identity and version filled in, plus the scale-200 logos as `Images/<name>.png`.
+  2b. Build `resources.pri` with `makepri createconfig` + `makepri new` (config kept outside the package). `SatelliteResourceLanguages=en` keeps .NET's language folders out (DECISIONS lesson 10).
   3. `makeappx pack /d <folder> /p dist/Screenshotz-win-x64.msix`.
   4. `signtool sign /fd SHA256 /f <pfx> /p <password> /tr http://timestamp.digicert.com /td SHA256`.
      - Without the certificate, the package is left unsigned for local testing, with a warning.

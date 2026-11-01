@@ -50,16 +50,27 @@ foreach ($name in 'Square44x44Logo', 'Square150x150Logo', 'Wide310x150Logo', 'St
     Copy-Item (Join-Path $icons "$name.scale-200.png") (Join-Path $images "$name.png")
 }
 
-# 3. Pack.
 $kit = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin\*\x64" -Directory | Sort-Object Name | Select-Object -Last 1
-if (-not $kit) { throw 'Windows SDK tools (makeappx, signtool) not found.' }
+if (-not $kit) { throw 'Windows SDK tools (makepri, makeappx, signtool) not found.' }
+$makepri = Join-Path $kit.FullName 'makepri.exe'
 $makeappx = Join-Path $kit.FullName 'makeappx.exe'
 $signtool = Join-Path $kit.FullName 'signtool.exe'
+
+# 3. Resource index (resources.pri), as Visual Studio makes it, so Windows doesn't index the package
+#    itself during install. The config file stays outside the package (a stray priconfig.xml breaks installs).
+$priConfig = Join-Path $out 'priconfig.xml'
+& $makepri createconfig /cf $priConfig /dq en-US /pv 10.0.0 /o
+if ($LASTEXITCODE -ne 0) { throw 'makepri createconfig failed.' }
+& $makepri new /pr $publish /cf $priConfig /mn (Join-Path $publish 'AppxManifest.xml') /of (Join-Path $publish 'resources.pri') /o
+if ($LASTEXITCODE -ne 0) { throw 'makepri new failed.' }
+Get-ChildItem $publish -Filter 'priconfig*.xml' | Remove-Item
+
+# 4. Pack.
 & $makeappx pack /o /h SHA256 /d $publish /p $msix
 if ($LASTEXITCODE -ne 0) { throw 'makeappx pack failed.' }
 
 if ($Channel -eq 'store') {
-    # 4s. The upload file Partner Center expects: a zip holding the .msix.
+    # 5s. The upload file Partner Center expects: a zip holding the .msix.
     $upload = Join-Path $dist 'Screenshotz-store-x64.msixupload'
     $zip = "$upload.zip"
     Compress-Archive -Path $msix -DestinationPath $zip -CompressionLevel Optimal
@@ -69,7 +80,7 @@ if ($Channel -eq 'store') {
     return
 }
 
-# 4. Sign (retry the timestamp server a few times) and verify.
+# 5. Sign (retry the timestamp server a few times) and verify.
 if ($signed) {
     $ok = $false
     foreach ($attempt in 1..3) {
@@ -92,7 +103,7 @@ if ($signed) {
     }
 }
 
-# 5. Checksum file, in sha256sum format.
+# 6. Checksum file, in sha256sum format.
 $hash = (Get-FileHash $msix -Algorithm SHA256).Hash.ToLower()
 Set-Content -Path "$msix.sha256" -Value "$hash  $msixName" -NoNewline -Encoding ascii
 Write-Output "Built $msix ($version, build $BuildNumber, $(if ($signed) { 'signed' } else { 'unsigned' }))"
