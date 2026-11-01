@@ -104,7 +104,11 @@ jobs:
           if ($LASTEXITCODE -ne 0) { Write-Output "::error::signtool could not sign with the .pfx."; exit 1 }
           & $signtool.FullName verify /pa $exe
           if ($LASTEXITCODE -ne 0) { Write-Output "::error::The signed test program didn't verify."; exit 1 }
-          $sig = Get-AuthenticodeSignature $exe
-          if ($sig.SignerCertificate.Thumbprint -ne $cert.Thumbprint) { Write-Output "::error::The test program is signed by a different certificate."; exit 1 }
+          # Read the signer straight from the file's embedded signature. (Get-AuthenticodeSignature can
+          # report a Windows catalog signature instead for a copied system file, so don't use it here.)
+          $signer = [Security.Cryptography.X509Certificates.X509Certificate2]::new(
+            [Security.Cryptography.X509Certificates.X509Certificate]::CreateFromSignedFile($exe))
+          Write-Output "Signed by:  $($signer.Subject)"
+          if ($signer.Thumbprint -ne $cert.Thumbprint) { Write-Output "::error::The test program is signed by a different certificate ($($signer.Subject))."; exit 1 }
           Remove-Item $pfx -Force
           Write-Output "Windows signing works."
