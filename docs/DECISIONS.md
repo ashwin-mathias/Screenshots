@@ -22,6 +22,8 @@ Why the app is the way it is. Read this before changing behaviour, so settled qu
 | 0.5 | **Version restarts at 0.5.0** | Ashwin's choice; follows the 0.4 macOS app |
 | 0.5 | **Identity kept**: name "Screenshot", Mac bundle ID `local.ashwinmathias.Screenshot` (settings carry over from 0.4); Windows `AshwinMathias.Screenshot` | Continuity |
 | 0.5 | **Branding like couch-lab**: personal project; About has the author row (avatar, Ashwin Mathias, "Creator of Screenshot") and a **Sparky card** (photo + note). **No payment or QR codes** | A screenshot tool may be shared more widely than a TV app; keep payment handles out |
+| 0.5 | **Sparky card text:** "Designed with love for Sparky, who always camps out where I work." | Ashwin's wording |
+| 0.5 | **New app icon**, drawn from code (`tools/make-icons.py`): blue-to-teal tile, four white capture corners, centre crosshair; matching monochrome tray glyphs and a checkmark variant | Ashwin chose a new icon over recovering the 0.4 files. Generated from code, so every size stays consistent and easy to change |
 | 0.5 | Removed from the 0.4 spec: "Company Genentech", "Developed by Codex…" credit, the work-laptop path, and historical verification records | Personal app; the new docs describe the product, not one past build |
 | 0.5 | Release history moves from `CHANGELOG.md` to `shared/changelog.json` | One structured file for both apps and for the GitHub release notes; no Markdown parser needed |
 | 0.5 | Tests use real frameworks (XCTest, MSTest) plus **shared JSON test cases** | 0.4's tests were standalone executables. Shared cases stop the two apps drifting apart |
@@ -32,10 +34,7 @@ Why the app is the way it is. Read this before changing behaviour, so settled qu
 
 ## Still to confirm
 
-| # | Question | Default in the docs |
-|---|---|---|
-| Q1 | Sparky card wording | "Designed with love for **Sparky**, who supervises every screenshot from under the desk." |
-| Q2 | Should the original 0.4 icon files replace the generated icon? | Generated icon (same design) unless Ashwin provides the files |
+(None open.)
 
 ## Check on real devices (assumptions to verify in 0.5 testing)
 

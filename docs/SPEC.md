@@ -392,7 +392,7 @@ Quit Screenshot                        ⌘Q on macOS
   2. **Author row:** avatar (circle) · **Ashwin Mathias** · "Creator of Screenshot". The text comes from `about.json`.
   3. **Sparky card:**
      - Sparky's photo (circle).
-     - "Designed with love for **Sparky**, who supervises every screenshot from under the desk." *(wording to confirm; see DECISIONS)*
+     - "Designed with love for **Sparky**, who always camps out where I work."
   4. "Screenshots stay on this computer. Screenshot only goes online to check GitHub for updates."
   5. **Check for Updates…** button.
   6. "MIT licence · github.com/ashwin-mathias/Screenshots" (link opens the browser).

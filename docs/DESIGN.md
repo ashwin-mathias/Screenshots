@@ -40,7 +40,7 @@ How the app **looks**. The apps use each platform's own controls, fonts and colo
   - the SF Symbol `viewfinder`, template image, accessibility label "Screenshot";
   - on success, `checkmark` for 2 s.
 - **Windows tray:**
-  - a monochrome viewfinder icon (16 / 20 / 24 / 32 px), white for a dark taskbar and black for a light one;
+  - the monochrome viewfinder glyph from §10 (16 / 20 / 24 / 32 px), white for a dark taskbar and black for a light one;
   - switch when the theme changes (`SystemUsesLightTheme`);
   - on success, a checkmark icon for 2 s;
   - tooltip "Screenshot — <status>".
@@ -161,9 +161,20 @@ How the app **looks**. The apps use each platform's own controls, fonts and colo
 - **Sizes:**
   - macOS: 16, 32, 128, 256 and 512 at 1× and 2× in `AppIcon.icns`;
   - Windows: an `.ico` with 16–256, plus the MSIX logo PNGs listed in ARCHITECTURE §7.
-- The icons are generated once by `tools/make-icons.py` from those values and **committed**.
-  - Builds don't regenerate them.
-  - If the 0.4 app's original icon files are available, they may replace the generated ones for exact looks.
+- **Corners:** each is one L-shaped stroke, arm length 30 % of the glyph box, stroke 6.5 % of the tile (10 % at 32 px and below), round ends.
+- **Crosshair:** 28 % of the glyph box, stroke 70 % of the corner stroke. It is left out below 24 px, so small sizes stay crisp.
+- **Tile:**
+  - macOS: Apple's 1024 grid (100 px margin, corner radius 22.5 % of the tile, soft shadow);
+  - Windows: 4 % margin, no shadow.
+- **Tray glyphs:** the same corners and crosshair with no tile, white (`onDark`) or black (`onLight`); the success variant swaps the crosshair for a checkmark.
+- `tools/make-icons.py` (Pillow) generates every file from these values. The output is **committed**, and builds don't regenerate it:
+
+  | Folder | Files |
+  |---|---|
+  | `shared/assets/icon/` | `AppIcon-1024.png` (master) |
+  | `…/macos/` | `icon_<16–512>[@2x].png`, `AppIcon.icns` |
+  | `…/windows/` | `AppIcon.ico` (16–256), MSIX logos `Square44x44Logo`, `Square150x150Logo`, `Wide310x150Logo`, `StoreLogo` at scale-100/200, and unplated `Square44x44Logo.targetsize-*` |
+  | `…/windows/tray/` | `tray-viewfinder-onDark.ico`, `tray-viewfinder-onLight.ico`, `tray-check-onDark.ico`, `tray-check-onLight.ico` |
 
 ## 11. Images
 
