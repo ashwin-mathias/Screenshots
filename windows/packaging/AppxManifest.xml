@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- MSIX manifest (ARCHITECTURE §7). build-msix.ps1 fills in __VERSION__ (X.Y.Z.0). -->
+<!-- MSIX manifest (ARCHITECTURE §7). build-msix.ps1 fills in __NAME__, __PUBLISHER__ (per channel) and __VERSION__ (X.Y.Z.0). -->
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
          xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
          xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10"
          xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
          IgnorableNamespaces="uap desktop rescap">
-  <Identity Name="AshwinMathias.Screenshot" Publisher="CN=Ashwin Mathias" Version="__VERSION__" ProcessorArchitecture="x64" />
+  <Identity Name="__NAME__" Publisher="__PUBLISHER__" Version="__VERSION__" ProcessorArchitecture="x64" />
   <Properties>
-    <DisplayName>Screenshot</DisplayName>
+    <DisplayName>Screenshotz</DisplayName>
     <PublisherDisplayName>Ashwin Mathias</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
@@ -18,8 +18,8 @@
     <Resource Language="en-us" />
   </Resources>
   <Applications>
-    <Application Id="Screenshot" Executable="Screenshot.exe" EntryPoint="Windows.FullTrustApplication">
-      <uap:VisualElements DisplayName="Screenshot"
+    <Application Id="Screenshotz" Executable="Screenshotz.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements DisplayName="Screenshotz"
                           Description="Capture an area of the screen: saved as a PNG and copied to the clipboard."
                           BackgroundColor="transparent"
                           Square150x150Logo="Images\Square150x150Logo.png"
@@ -27,8 +27,8 @@
         <uap:DefaultTile Wide310x150Logo="Images\Wide310x150Logo.png" />
       </uap:VisualElements>
       <Extensions>
-        <desktop:Extension Category="windows.startupTask" Executable="Screenshot.exe" EntryPoint="Windows.FullTrustApplication">
-          <desktop:StartupTask TaskId="ScreenshotStartup" Enabled="false" DisplayName="Screenshot" />
+        <desktop:Extension Category="windows.startupTask" Executable="Screenshotz.exe" EntryPoint="Windows.FullTrustApplication">
+          <desktop:StartupTask TaskId="ScreenshotStartup" Enabled="false" DisplayName="Screenshotz" />
         </desktop:Extension>
       </Extensions>
     </Application>

@@ -3,20 +3,20 @@ namespace Screenshot.Services;
 /// <summary>On-screen text, exactly as in SPEC.md. Keep in step with the macOS app.</summary>
 internal static class Strings
 {
-    public const string AppName = "Screenshot";
+    public const string AppName = "Screenshotz";
 
     // status line
     public const string Ready = "Ready to capture";
     public const string Selecting = "Select an area · Esc to cancel";
     public const string SavedAndCopied = "Saved and copied to clipboard";
     public const string Cancelled = "Capture cancelled";
-    public const string NeedsAttention = "Screenshot needs attention";
+    public const string NeedsAttention = "Screenshotz needs attention";
     public const string CopiedRecent = "Copied screenshot to clipboard";
     public const string PreviewUnavailable = "Screenshot preview unavailable · Use Recent Screenshots to open it";
     public const string CheckingUpdates = "Checking for updates…";
     public static string Downloading(int percent) => $"Downloading update… {percent}%";
     public const string Installing = "Installing update…";
-    public static string UpdatedTo(string v) => $"Updated to Screenshot {v}";
+    public static string UpdatedTo(string v) => $"Updated to Screenshotz {v}";
 
     // preview captions
     public const string CaptionSavedAndCopied = "Saved and copied";
@@ -36,9 +36,9 @@ internal static class Strings
     public const string LaunchAtLoginSettings = "Launch at Login — Turn On in Settings…";
     public const string AutoUpdate = "Check for Updates Automatically";
     public const string CheckForUpdates = "Check for Updates…";
-    public const string HowToUse = "How to Use Screenshot…";
-    public const string HelpAbout = "Help & About Screenshot…";
-    public const string Quit = "Quit Screenshot";
+    public const string HowToUse = "How to Use Screenshotz…";
+    public const string HelpAbout = "Help & About Screenshotz…";
+    public const string Quit = "Quit Screenshotz";
     public static string InstallUpdate(string v) => $"Install Update {v}…";
     public const string CancelUpdate = "Cancel Update";
     public const string Loading = "Loading screenshots…";
@@ -60,14 +60,16 @@ internal static class Strings
         "Windows is using Print Screen for its own screen capture. Turn off \"Use the Print screen key to open screen capture\" in Settings, then turn this shortcut on again.";
     public static string ShortcutTaken(string name, int code) =>
         $"The {name} shortcut couldn't be turned on because another app is already using it (Windows error {code}). You can still use Capture Area in the menu.";
-    public const string UpToDatePrefix = "You're up to date. Screenshot ";
+    public const string UpToDatePrefix = "You're up to date. Screenshotz ";
     public const string UpToDateSuffix = " is the latest version.";
     public const string UpdateCheckFailed = "Couldn't check for updates.";
     public const string UpdateUnsafe = "The update didn't pass its safety check, so it wasn't installed.";
     public const string UpdatesNeedInstalledApp = "Updates work only in the installed app (from the .msix).";
 
     // help
-    public const string Privacy = "Screenshots stay on this computer. Screenshot only goes online to check GitHub for updates.";
+    public static string Privacy => AppInfo.IsStoreBuild
+        ? "Screenshots stay on this computer. Screenshotz doesn't go online; the Microsoft Store handles updates."
+        : "Screenshots stay on this computer. Screenshotz only goes online to check GitHub for updates.";
     public const string Licence = "MIT licence · github.com/ashwin-mathias/Screenshots";
     public const string RepoUrl = "https://github.com/ashwin-mathias/Screenshots";
 }

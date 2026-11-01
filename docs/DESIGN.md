@@ -1,4 +1,4 @@
-# Screenshot — Design
+# Screenshotz — Design
 
 How the app **looks**. The apps use each platform's own controls, fonts and colours, so they feel native. Sizes and layout are shared so the two apps feel like the same product. If code and this file disagree, fix one of them in the same commit.
 
@@ -37,13 +37,13 @@ How the app **looks**. The apps use each platform's own controls, fonts and colo
 ## 4. Status icon and menu
 
 - **macOS menu bar:**
-  - the SF Symbol `viewfinder`, template image, accessibility label "Screenshot";
+  - the SF Symbol `viewfinder`, template image, accessibility label "Screenshotz";
   - on success, `checkmark` for 2 s.
 - **Windows tray:**
   - the monochrome viewfinder glyph from §10 (16 / 20 / 24 / 32 px), white for a dark taskbar and black for a light one;
   - switch when the theme changes (`SystemUsesLightTheme`);
   - on success, a checkmark icon for 2 s;
-  - tooltip "Screenshot — <status>".
+  - tooltip "Screenshotz — <status>".
 - **Menu:**
   - macOS: native `NSMenu`;
   - Windows: a WPF `ContextMenu` with the Fluent theme, opened at the pointer from the tray icon. The item order is in SPEC UI-001.
@@ -97,7 +97,7 @@ How the app **looks**. The apps use each platform's own controls, fonts and colo
 
 ## 7. Welcome window
 
-- **540 × 400**, centred, title "Welcome to Screenshot".
+- **540 × 400**, centred, title "Welcome to Screenshotz".
 - Not resizable.
   - macOS: closable and minimisable.
   - Windows: closable only.
@@ -114,7 +114,7 @@ How the app **looks**. The apps use each platform's own controls, fonts and colo
      - "Saved to Documents/screenshots" (Windows: `Documents\screenshots`)
      - "The image is on your clipboard"
      - "Turn shortcuts on or off in the menu"
-  5. **Windows only:** "Can't see the icon? Click ^ in the taskbar and drag Screenshot next to the clock."
+  5. **Windows only:** "Can't see the icon? Click ^ in the taskbar and drag Screenshotz next to the clock."
   6. Buttons, right-aligned: **Help & About**, **Recent Screenshots**, **Capture Area** (default / accent).
   7. Live status line (12, secondary) under the buttons.
 
@@ -125,12 +125,12 @@ How the app **looks**. The apps use each platform's own controls, fonts and colo
 - **About tab:**
   - **App row:**
     - app icon 64;
-    - "Screenshot" (20 semibold);
+    - "Screenshotz" (20 semibold);
     - "Version 0.5.0 (build N)" (12 secondary).
   - **Author row** (as in couch-lab):
     - avatar **64**, circle (`avatar.png`), gap 16;
     - **Ashwin Mathias** (17 semibold);
-    - "Creator of Screenshot" (12 secondary).
+    - "Creator of Screenshotz" (12 secondary).
   - **Sparky card:**
     - rounded rectangle, corner radius 12, padding 16;
     - background: macOS `controlBackgroundColor`, Windows `CardBackgroundFillColorDefault`;

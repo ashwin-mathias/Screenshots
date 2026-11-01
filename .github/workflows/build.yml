@@ -85,17 +85,26 @@ jobs:
           }
           try {
             & ./windows/scripts/build-msix.ps1 @buildArgs
+            & ./windows/scripts/build-msix.ps1 -Channel store -BuildNumber '${{ github.run_number }}'
           } catch {
             Write-Output "::error::$($_.Exception.Message)"; exit 1
           } finally {
             if ($pfx) { Remove-Item $pfx -Force -ErrorAction SilentlyContinue }
           }
 
-      - name: Upload the Windows app
+      - name: Upload the Windows test build
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: Screenshot-windows-build-${{ github.run_number }}
-          path: windows/dist/*
+          name: Screenshotz-windows-test-build-${{ github.run_number }}
+          path: windows/dist/test/*
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload the Microsoft Store package
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: Screenshotz-store-build-${{ github.run_number }}
+          path: windows/dist/store/*
           if-no-files-found: error
           retention-days: 30
 

@@ -18,6 +18,12 @@ internal static class AppInfo
     /// <summary>The thumbprint of the certificate updates must be signed with. Empty in local builds.</summary>
     public static string CertThumbprint { get; } = (Metadata("CertThumbprint") ?? "").Trim().ToUpperInvariant();
 
+    /// <summary>The Microsoft Store build: the Store installs updates and the app never goes online (UPD-007).</summary>
+    public static bool IsStoreBuild { get; } = string.Equals(Metadata("Channel"), "store", StringComparison.OrdinalIgnoreCase);
+
+    public const string StoreProductId = "9NM6DV5TJJ6C";
+    public const string StorePage = "ms-windows-store://pdp/?productid=" + StoreProductId;
+
     /// <summary>True when running from the installed MSIX (needed for updates and launch at login).</summary>
     public static bool IsPackaged { get; } = DetectPackage();
 

@@ -37,7 +37,7 @@ internal sealed class SelectionOverlay : Window
         _frame = frame;
         _display = display;
 
-        Title = "Screenshot selection";
+        Title = "Screenshotz selection";
         WindowStyle = WindowStyle.None;
         ResizeMode = ResizeMode.NoResize;
         ShowInTaskbar = false;

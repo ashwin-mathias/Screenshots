@@ -38,7 +38,7 @@ internal sealed class Updater : IDisposable
             PooledConnectionLifetime = TimeSpan.FromMinutes(5),
         })
         { Timeout = TimeSpan.FromSeconds(15) };
-        _http.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Screenshot", AppInfo.Version.ToString()));
+        _http.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Screenshotz", AppInfo.Version.ToString()));
         _http.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("(Windows)"));
 
         _timer = new System.Windows.Threading.DispatcherTimer { Interval = FirstCheckDelay };
@@ -129,7 +129,7 @@ internal sealed class Updater : IDisposable
             try { info = MsixInspector.Inspect(file); }
             catch (MsixInspectionException e) { throw new UpdateException($"{Strings.UpdateUnsafe} {e.Message}"); }
             if (info.SignerThumbprint != AppInfo.CertThumbprint)
-                throw new UpdateException($"{Strings.UpdateUnsafe} It isn't signed with Screenshot's certificate.");
+                throw new UpdateException($"{Strings.UpdateUnsafe} It isn't signed with Screenshotz's certificate.");
             if (info.Name != "AshwinMathias.Screenshot" || info.Publisher != "CN=Ashwin Mathias")
                 throw new UpdateException($"{Strings.UpdateUnsafe} It's a different app.");
             if (info.Version != $"{offer.Version}.0")
@@ -182,7 +182,7 @@ internal sealed class Updater : IDisposable
     {
         using var download = new HttpClient(new SocketsHttpHandler { AllowAutoRedirect = true, MaxAutomaticRedirections = 5 })
         { Timeout = Timeout.InfiniteTimeSpan };
-        download.DefaultRequestHeaders.UserAgent.ParseAdd($"Screenshot/{AppInfo.Version} (Windows)");
+        download.DefaultRequestHeaders.UserAgent.ParseAdd($"Screenshotz/{AppInfo.Version} (Windows)");
         using var r = await download.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, ct);
         RequireHttps(r);
         r.EnsureSuccessStatusCode();

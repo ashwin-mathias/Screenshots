@@ -24,7 +24,7 @@ internal sealed class Settings
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
     };
 
-    public static string Folder => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Screenshot");
+    public static string Folder => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Screenshotz");
     private static string FilePath => Path.Combine(Folder, "settings.json");
 
     public static Settings Load()

@@ -38,7 +38,7 @@ internal sealed class TrayIcon : IDisposable
     private readonly nint _hwnd;
     private readonly Dictionary<string, nint> _icons = [];
     private string _iconName = "viewfinder";
-    private string _tip = "Screenshot";
+    private string _tip = "Screenshotz";
     private bool _added;
 
     public TrayIcon(nint messageWindow) => _hwnd = messageWindow;

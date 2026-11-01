@@ -7,7 +7,7 @@ Paste the prompt below into a new Claude Code session (or any coding agent) that
 ---
 
 ```text
-You are building "Screenshot", a small menu-bar (macOS) / system-tray (Windows) utility that captures a selected
+You are building "Screenshotz", a small menu-bar (macOS) / system-tray (Windows) utility that captures a selected
 area of one display, saves the original PNG to Documents/screenshots, and copies the image to the clipboard.
 There are two native apps — Swift/AppKit for macOS 13+ (universal) and C#/.NET 10 + WPF for Windows 11 x64 — built
 from one specification. The version is in the VERSION file. If this prompt and the docs disagree, the docs win.

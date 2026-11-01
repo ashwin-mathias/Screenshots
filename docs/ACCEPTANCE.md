@@ -1,4 +1,4 @@
-# Screenshot — Acceptance tests
+# Screenshotz — Acceptance tests
 
 A release is "done" only when the automated tests pass in CI **and** every manual check below passes on a real **Mac** and a real **Windows 11 PC**. Section R lists bugs that were shipped and fixed; each one is a regression test.
 
@@ -40,11 +40,12 @@ Safety while testing:
 
 ## A. Install and update
 
-- [ ] A1 [M] Fresh install from `Screenshot-mac.zip`: "Open Anyway" is needed once. The app opens with one menu-bar icon and the Welcome window.
-- [ ] A2 [W] Fresh PC: installing the `.msix` without the certificate fails with a clear Windows message. After importing `Screenshot-signing.cer` into Local Machine → Trusted People it installs. Start menu shows "Screenshot"; tray icon and Welcome appear.
+- [ ] A1 [M] Fresh install from `Screenshotz-mac.zip`: "Open Anyway" is needed once. The app opens with one menu-bar icon and the Welcome window.
+- [ ] A0 [W] Store build: **Get** from the Microsoft Store installs with no certificate step; Start menu shows **Screenshotz**; the menu has no Check for Updates Automatically item, and **Check for Updates…** opens the Store page. With a network monitor, the app makes no network requests (UPD-007).
+- [ ] A2 [W] Test build on a fresh PC: installing the `.msix` without the certificate fails with a clear Windows message. After importing `Screenshotz-signing.cer` into Local Machine → Trusted People it installs. Start menu shows "Screenshotz"; tray icon and Welcome appear.
 - [ ] A3 Check for Updates… on the latest version says "You're up to date…".
 - [ ] A4 With a newer test release: the prompt appears with notes; **Later** closes it and leaves "Install Update X…" in the menu; nothing is downloaded (check the temp folder and network log).
-- [ ] A5 **Install and Relaunch**: progress shows in the status line; the app quits, updates and reopens; About shows the new version; "Updated to Screenshot X" once.
+- [ ] A5 **Install and Relaunch**: progress shows in the status line; the app quits, updates and reopens; About shows the new version; "Updated to Screenshotz X" once.
 - [ ] A6 After the update, settings and shortcuts are unchanged. [M] Screen Recording permission is still granted (no new prompt).
 - [ ] A7 **Skip This Version**: automatic checks don't offer it again; a manual check still does.
 - [ ] A8 Test release without the `.sha256` file: not offered. Wrong checksum: "didn't pass its safety check", nothing installed, old version still runs.
@@ -115,7 +116,8 @@ Safety while testing:
 
 - [ ] G1 CI passes on both jobs; the release has the five assets; checksums match.
 - [ ] G2 [M] `codesign --verify --strict`, `plutil -lint` pass; the app is universal (`lipo -archs` shows arm64 x86_64).
-- [ ] G3 [W] `signtool verify /pa` passes; the manifest identity and version are right.
+- [ ] G3a [W] Partner Center accepts `Screenshotz-store-x64.msixupload` (package validation passes) and certification passes.
+- [ ] G3 [W] `signtool verify /pa` passes on the test build; the manifest identity and version are right.
 - [ ] G4 Source review: no network code except the updater; no analytics; no keyboard hook / Input Monitoring.
 
 ## R. Regression tests

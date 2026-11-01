@@ -31,7 +31,7 @@ internal sealed class PreviewWindow : Window
 
     public PreviewWindow()
     {
-        Title = "Screenshot preview";
+        Title = "Screenshotz preview";
         WindowStyle = WindowStyle.None;
         AllowsTransparency = true;
         Background = Brushes.Transparent;

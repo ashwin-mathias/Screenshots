@@ -1,4 +1,4 @@
-# Screenshot — Product specification
+# Screenshotz — Product specification
 
 Version described: **0.5.0** (November 2026). Status: **draft for approval**.
 
@@ -20,7 +20,7 @@ Words used:
   - an **image on the clipboard**, ready to paste.
 - Used by one person (Ashwin) on his own **Mac** and **Windows PC**, many times a day, to paste screen regions into documents, chats and slides while keeping a file copy.
 - The app lives in the **menu bar (macOS)** or **system tray (Windows)**. It has no main window, no account and no server.
-- App name: **Screenshot**. Repo: `ashwin-mathias/Screenshots` (public, MIT licence).
+- App name: **Screenshotz**. Repo: `ashwin-mathias/Screenshots` (public, MIT licence).
 
 ## 2. Principles
 
@@ -39,9 +39,10 @@ Words used:
 | Minimum OS | macOS 13 Ventura | Windows 11 (any supported release) |
 | Architectures | Universal: Apple silicon + Intel | x64 only (ARM64 later) |
 | Where the app lives | Menu bar (no Dock icon) | System tray (no taskbar button) |
-| App ID | Bundle ID `local.ashwinmathias.Screenshot` | MSIX identity `AshwinMathias.Screenshot`, publisher `CN=Ashwin Mathias` |
-| Delivered as | `Screenshot-mac.zip` containing `Screenshot.app` | `Screenshot-win-x64.msix` |
-| Signed with | Self-signed code-signing certificate (§14) | Self-signed code-signing certificate (§14) |
+| App ID | Bundle ID `local.ashwinmathias.Screenshot` | **Store:** `AshwinMathias.Screenshotz`, publisher `CN=7E8438D5-12B0-4FC0-9098-FE994BBCE149`, family name `AshwinMathias.Screenshotz_gg9r6ndhn3xw6`, Store ID `9NM6DV5TJJ6C`. **Test builds:** `AshwinMathias.Screenshot`, publisher `CN=Ashwin Mathias` |
+| Delivered as | `Screenshotz-mac.zip` containing `Screenshotz.app` | **Microsoft Store** (the "Store build"). Test builds: `Screenshotz-win-x64.msix` |
+| Signed with | Self-signed code-signing certificate (§14) | Store build: signed by Microsoft. Test builds: self-signed certificate (§14) |
+| Updates | In-app updater (§13) | Store build: the Microsoft Store (§13, UPD-007). Test builds: the in-app updater, from `Screenshotz-win-x64.msix` on GitHub releases |
 | Default shortcuts | **⌥S** (Option-S) and **⌘⌥4** (Command-Option-4), both on | **Alt+S** on; **Print Screen** off (optional) |
 | Screenshot folder | `~/Documents/screenshots` | `Documents\screenshots` (the Windows *Documents* known folder) |
 | Mark Up opens in | Preview | The PNG "Edit" app (Paint by default) |
@@ -60,7 +61,7 @@ Words used:
 ## 4. User journeys
 
 ### 4.1 First capture
-1. The user opens Screenshot. The app icon appears in the menu bar / tray. On first launch the **Welcome** window opens (§11.2).
+1. The user opens Screenshotz. The app icon appears in the menu bar / tray. On first launch the **Welcome** window opens (§11.2).
 2. The user presses a shortcut or chooses **Capture Area**.
 3. **macOS only:** if Screen Recording permission is missing, the app asks for it and explains how to turn it on (§8). The user tries again after approving.
 4. The user lets go of the shortcut keys, drags a rectangle and releases the mouse.
@@ -178,9 +179,9 @@ Only one capture runs at a time. Status text, menu items, the busy flag and clea
 
 ### ERR-001 — Errors the user can act on
 - Operational errors open an alert:
-  - title "Screenshot needs attention", warning style;
+  - title "Screenshotz needs attention", warning style;
   - the message says what failed and what to do.
-- The menu status line also becomes "Screenshot needs attention".
+- The menu status line also becomes "Screenshotz needs attention".
 - Messages must say **which shortcut** failed, or that the image **was saved but not copied**.
 - Expected failures:
   - the folder can't be created or written;
@@ -336,7 +337,7 @@ Only one capture runs at a time. Status text, menu items, the busy flag and clea
 - **Quit** dismisses the preview, unregisters shortcuts, stops an active capture, and cancels an update download.
 - **Windows tray:**
   - A **left-click or right-click** on the tray icon opens the same menu.
-  - The tooltip is "Screenshot — <status>".
+  - The tooltip is "Screenshotz — <status>".
   - On first launch, Welcome tells the user that Windows may put the icon in the hidden-icons area (^) and how to pin it.
 
 ---
@@ -363,10 +364,10 @@ Check for Updates Automatically        ✓ by default
 ──────────
 Screen Recording Permission…           ← macOS only
 Check for Updates…
-How to Use Screenshot…
-Help & About Screenshot…
+How to Use Screenshotz…
+Help & About Screenshotz…
 ──────────
-Quit Screenshot                        ⌘Q on macOS
+Quit Screenshotz                        ⌘Q on macOS
 ```
 
 - First status: "Ready to capture".
@@ -388,12 +389,13 @@ Quit Screenshot                        ⌘Q on macOS
 ### HELP-001 — Help & About window
 - Three tabs: **About**, **How to Use**, **Release History**. Text wraps, scrolls, can be selected and can't be edited.
 - **About** (top to bottom):
-  1. App icon, "Screenshot", "Version 0.5.0 (build N)" read from the app's own metadata.
-  2. **Author row:** avatar (circle) · **Ashwin Mathias** · "Creator of Screenshot". The text comes from `about.json`.
+  1. App icon, "Screenshotz", "Version 0.5.0 (build N)" read from the app's own metadata.
+  2. **Author row:** avatar (circle) · **Ashwin Mathias** · "Creator of Screenshotz". The text comes from `about.json`.
   3. **Sparky card:**
      - Sparky's photo (circle).
      - "Designed with love for **Sparky**, who always camps out where I work."
-  4. "Screenshots stay on this computer. Screenshot only goes online to check GitHub for updates."
+  4. macOS: "Screenshots stay on this computer. Screenshotz only goes online to check GitHub for updates."
+     Windows Store build: "Screenshots stay on this computer. Screenshotz doesn't go online; the Microsoft Store handles updates."
   5. **Check for Updates…** button.
   6. "MIT licence · github.com/ashwin-mathias/Screenshots" (link opens the browser).
 - There are no payment or QR codes.
@@ -475,6 +477,8 @@ Quit Screenshot                        ⌘Q on macOS
 
 ## 13. Updates
 
+UPD-001 to UPD-006 describe the **in-app updater**, used by the **macOS app** and the **Windows test build**. The **Windows Store build** uses the Microsoft Store instead (UPD-007).
+
 ### UPD-001 — When the app checks
 - **Check for Updates Automatically** is **on** by default (preference `autoUpdateCheckDisabled`, missing = on).
   - When on, check **10 s after launch** and then every **24 h** while running.
@@ -482,13 +486,13 @@ Quit Screenshot                        ⌘Q on macOS
 - **Check for Updates…** (menu and About) checks at once.
 - Automatic checks are **silent** unless there's an update. Failures are only logged.
 - A manual check always answers:
-  - "You're up to date. Screenshot 0.5.0 is the latest version.", or
+  - "You're up to date. Screenshotz 0.5.0 is the latest version.", or
   - "Couldn't check for updates. <detail>", or
   - the update prompt.
 
 ### UPD-002 — What is checked
 - `GET https://api.github.com/repos/ashwin-mathias/Screenshots/releases/latest`
-  - Headers: `Accept: application/vnd.github+json`, `User-Agent: Screenshot/<version> (<macOS|Windows>)`.
+  - Headers: `Accept: application/vnd.github+json`, `User-Agent: Screenshotz/<version> (<macOS|Windows>)`.
   - No login or token. Timeout 15 s.
 - Read `tag_name` (format `vX.Y.Z`), `body` (release notes) and `assets`.
 - An update exists when the tag version is **greater** than the running version, comparing X, Y and Z as numbers.
@@ -498,14 +502,14 @@ Quit Screenshot                        ⌘Q on macOS
 
   | Platform | App file | Checksum file |
   |---|---|---|
-  | macOS | `Screenshot-mac.zip` | `Screenshot-mac.zip.sha256` |
-  | Windows | `Screenshot-win-x64.msix` | `Screenshot-win-x64.msix.sha256` |
+  | macOS | `Screenshotz-mac.zip` | `Screenshotz-mac.zip.sha256` |
+  | Windows | `Screenshotz-win-x64.msix` | `Screenshotz-win-x64.msix.sha256` |
 
 - Asset links must start with `https://github.com/ashwin-mathias/Screenshots/releases/download/`. Redirects are followed only to `https` addresses.
 
 ### UPD-003 — Ask first, always
 - When an update is found:
-  - show the prompt (DESIGN §9): "Screenshot <new> is available" / "You have <current>." plus the release notes;
+  - show the prompt (DESIGN §9): "Screenshotz <new> is available" / "You have <current>." plus the release notes;
   - add the menu item **Install Update <new>…** under the status line.
 - Buttons:
   - **Install and Relaunch** (default) — download, check and install.
@@ -539,7 +543,7 @@ Quit Screenshot                        ⌘Q on macOS
 
 ### UPD-005 — Install and relaunch
 - **macOS:**
-  1. Check that the folder holding `Screenshot.app` is writable. If it isn't, say "Screenshot can't update itself in this folder. Move it to Applications, or download the update yourself." with **Open Download Page** and **Cancel**.
+  1. Check that the folder holding `Screenshotz.app` is writable. If it isn't, say "Screenshotz can't update itself in this folder. Move it to Applications, or download the update yourself." with **Open Download Page** and **Cancel**.
   2. Start a small helper script (`/bin/sh` with an argument array) and quit. The script:
      - waits for the app's process to end;
      - moves the old app to the temp folder as a backup;
@@ -552,11 +556,18 @@ Quit Screenshot                        ⌘Q on macOS
   2. Install with `PackageManager.AddPackageAsync(<msix>, null, ForceApplicationShutdown)`. Windows closes the app, updates it and restarts it.
   3. On failure (for example the certificate isn't trusted on this PC), show the Windows error in plain words with **Open Download Page**.
 - After an update, the app opens normally. Settings, shortcuts, and (macOS) the Screen Recording permission are kept.
-- Status after relaunch, once: "Updated to Screenshot <version>".
+- Status after relaunch, once: "Updated to Screenshotz <version>".
 
 ### UPD-006 — Network limits
 - The app talks only to `api.github.com`, `github.com` and GitHub's download servers it is redirected to, and only for UPD-002 and UPD-004.
 - No analytics, no IDs, no screenshot data, ever.
+
+### UPD-007 — Windows: the Microsoft Store updates the app (platform difference)
+- The Store build contains **no update code paths that run**: no GitHub checks, no downloads. It makes **no network requests at all**.
+- The menu has no **Check for Updates Automatically** item and never shows **Install Update…**.
+- **Check for Updates…** (menu and About) opens the app's Store page (`ms-windows-store://pdp/?productid=9NM6DV5TJJ6C`). The Store shows **Update** there when a newer version exists.
+- Windows installs Store updates by itself. Settings and shortcuts are kept, because the package identity never changes.
+- The build channel (`store` or `test`) is fixed at build time, not detected at run time.
 
 ---
 
@@ -566,14 +577,15 @@ Details are in ARCHITECTURE §8.
 
 - Every push to `main` builds and tests both apps on GitHub Actions.
 - A **release is published only when `VERSION` changes** to a version with no tag yet. Tag `vX.Y.Z`. Assets:
-  - `Screenshot-mac.zip` and `Screenshot-mac.zip.sha256`;
-  - `Screenshot-win-x64.msix` and `Screenshot-win-x64.msix.sha256`;
-  - `Screenshot-signing.cer`, the public Windows certificate, so a new PC can trust the app.
+  - `Screenshotz-mac.zip` and `Screenshotz-mac.zip.sha256` (the macOS updater reads these);
+  - `Screenshotz-win-x64.msix`, `Screenshotz-win-x64.msix.sha256` and `Screenshotz-signing.cer`: the Windows **test build**, its checksum and its public certificate;
+  - `Screenshotz-store-x64.msixupload`: the unsigned **Store build**, which Ashwin uploads in Partner Center (see STORE.md);
   - The release notes are the `changelog.json` entry for that version.
-- Both apps are signed in CI with **self-signed certificates** kept in GitHub Actions secrets. An offline backup is kept by Ashwin.
-- **First install, once per computer:**
-  - **macOS:** unzip, move `Screenshot.app` to Applications, open it. macOS blocks the first open; allow it in **System Settings → Privacy & Security → Open Anyway**.
-  - **Windows:** install `Screenshot-signing.cer` into **Local Machine → Trusted People** (one admin step, README has the steps), then double-click the `.msix`.
+- The macOS app and the Windows test build are signed in CI with **self-signed certificates** kept in GitHub Actions secrets, with an offline backup kept by Ashwin. Microsoft signs the Store build.
+- **First install:**
+  - **macOS** (once per Mac): unzip, move `Screenshotz.app` to Applications, open it. macOS blocks the first open; allow it in **System Settings → Privacy & Security → Open Anyway**.
+  - **Windows:** **Get** it from the Microsoft Store. No other step.
+  - **Windows test build** (Ashwin only): trust `Screenshotz-signing.cer` once (**Local Machine → Trusted People**), then double-click the `.msix`. Test and Store builds have different identities, so both can be installed side by side.
 - Updates after that need no extra steps (§13).
 
 ---
@@ -666,7 +678,7 @@ Details are in ARCHITECTURE §8.
   - permission denial never causes repeated automatic captures;
   - updates install only after the user agrees.
 - **NFR-006 Accessibility:**
-  - meaningful names for the status icon ("Screenshot"), preview image ("Captured screenshot"), close button ("Dismiss preview"), preview buttons and help tabs;
+  - meaningful names for the status icon ("Screenshotz"), preview image ("Captured screenshot"), close button ("Dismiss preview"), preview buttons and help tabs;
   - everything works with VoiceOver and Narrator;
   - every window works from the keyboard;
   - the Windows overlay is the exception: it is mouse-only for selection, and Esc cancels.

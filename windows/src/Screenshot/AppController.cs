@@ -122,7 +122,7 @@ internal sealed class AppController : IDisposable
         }
 
         _updater.OfferFound += (offer, manual) => _ = PromptForUpdateAsync(offer, manual);
-        if (AppInfo.IsPackaged) _updater.Start();
+        if (AppInfo.IsPackaged && !AppInfo.IsStoreBuild) _updater.Start(); // the Store updates the Store build (UPD-007)
     }
 
     public void Dispose()
@@ -150,7 +150,7 @@ internal sealed class AppController : IDisposable
     private void SetStatus(string text)
     {
         _status = text;
-        _tray.SetTooltip($"Screenshot — {text}");
+        _tray.SetTooltip($"Screenshotz — {text}");
         _welcome?.SetStatus(text);
     }
 
@@ -290,7 +290,7 @@ internal sealed class AppController : IDisposable
         catch (Exception e) when (e is FileActions.ActionException or InvalidImageException or ClipboardException)
         {
             SetStatus(Strings.NeedsAttention);
-            _ = AlertWindow.Error(e is InvalidImageException ? "That file isn't an image Screenshot can copy." : e.Message);
+            _ = AlertWindow.Error(e is InvalidImageException ? "That file isn't an image Screenshotz can copy." : e.Message);
         }
     }
 
@@ -404,7 +404,7 @@ internal sealed class AppController : IDisposable
         _menuHost ??= new Window
         {
             WindowStyle = WindowStyle.None, AllowsTransparency = true, Background = System.Windows.Media.Brushes.Transparent,
-            ShowInTaskbar = false, Width = 1, Height = 1, Left = -32000, Top = -32000, Topmost = true, Title = "Screenshot menu",
+            ShowInTaskbar = false, Width = 1, Height = 1, Left = -32000, Top = -32000, Topmost = true, Title = "Screenshotz menu",
         };
         _menuHost.Show();
         _menuHost.Activate();
@@ -424,7 +424,8 @@ internal sealed class AppController : IDisposable
     {
         var m = new ContextMenu();
         m.Items.Add(Disabled(_status));
-        if (_updater.IsDownloading) m.Items.Add(Item(Strings.CancelUpdate, _updater.CancelDownload));
+        if (AppInfo.IsStoreBuild) { }
+        else if (_updater.IsDownloading) m.Items.Add(Item(Strings.CancelUpdate, _updater.CancelDownload));
         else if (_updater.Pending is { } offer) m.Items.Add(Item(Strings.InstallUpdate(offer.Version.ToString()), () => _ = PromptForUpdateAsync(offer, manual: true)));
         m.Items.Add(new Separator());
 
@@ -450,11 +451,14 @@ internal sealed class AppController : IDisposable
         m.Items.Add(Check(Strings.EnableAltS, _hotkeys.IsRegistered(HotkeyManager.AltS), ToggleAltS));
         m.Items.Add(Check(Strings.EnablePrintScreen, _hotkeys.IsRegistered(HotkeyManager.PrintScreen), () => _ = TogglePrintScreenAsync()));
         m.Items.Add(LoginMenuItem(login));
-        m.Items.Add(Check(Strings.AutoUpdate, !_settings.AutoUpdateCheckDisabled, () =>
+        if (!AppInfo.IsStoreBuild)
         {
-            _settings.AutoUpdateCheckDisabled = !_settings.AutoUpdateCheckDisabled;
-            _settings.Save();
-        }));
+            m.Items.Add(Check(Strings.AutoUpdate, !_settings.AutoUpdateCheckDisabled, () =>
+            {
+                _settings.AutoUpdateCheckDisabled = !_settings.AutoUpdateCheckDisabled;
+                _settings.Save();
+            }));
+        }
         m.Items.Add(new Separator());
 
         m.Items.Add(Item(Strings.CheckForUpdates, () => _ = ManualUpdateCheckAsync()));
@@ -597,6 +601,11 @@ internal sealed class AppController : IDisposable
 
     private async Task ManualUpdateCheckAsync()
     {
+        if (AppInfo.IsStoreBuild)
+        {
+            HelpAboutWindow.OpenUrl(AppInfo.StorePage); // the Store shows Update when there is one (UPD-007)
+            return;
+        }
         var before = _status;
         SetStatus(Strings.CheckingUpdates);
         try
@@ -618,13 +627,14 @@ internal sealed class AppController : IDisposable
 
     private async Task PromptForUpdateAsync(UpdateOffer offer, bool manual)
     {
+        if (AppInfo.IsStoreBuild) return;
         if (_updatePromptOpen || _updater.IsDownloading) return;
         _updatePromptOpen = true;
         int choice;
         try
         {
             choice = await new AlertWindow(
-                $"Screenshot {offer.Version} is available",
+                $"Screenshotz {offer.Version} is available",
                 $"You have {AppInfo.Version}. Would you like to install it now?",
                 ["Install and Relaunch", "Later", "Skip This Version"],
                 notes: string.IsNullOrWhiteSpace(offer.Notes) ? null : offer.Notes,

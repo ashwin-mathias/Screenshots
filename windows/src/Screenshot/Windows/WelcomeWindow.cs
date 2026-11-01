@@ -17,7 +17,7 @@ internal sealed class WelcomeWindow : Window
 
     public WelcomeWindow()
     {
-        Title = "Welcome to Screenshot";
+        Title = "Welcome to Screenshotz";
         Width = 540;
         Height = 400;
         ResizeMode = ResizeMode.NoResize;
@@ -39,7 +39,7 @@ internal sealed class WelcomeWindow : Window
             "Turn shortcuts on or off in the menu",
         })
             root.Children.Add(new TextBlock { Text = line, Margin = new Thickness(0, 2, 0, 2) });
-        root.Children.Add(Secondary("Can't see the icon? Click ^ in the taskbar and drag Screenshot next to the clock.", top: 10));
+        root.Children.Add(Secondary("Can't see the icon? Click ^ in the taskbar and drag Screenshotz next to the clock.", top: 10));
 
         var buttons = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 18, 0, 0) };
         buttons.Children.Add(MakeButton("Help & About", () => HelpRequested?.Invoke(), accent: false));

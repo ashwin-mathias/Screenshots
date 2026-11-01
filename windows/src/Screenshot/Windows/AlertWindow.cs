@@ -18,7 +18,7 @@ internal sealed class AlertWindow : Window
     public AlertWindow(string title, string message, IReadOnlyList<string> buttons, string? notes = null, bool warning = false, int? cancelIndex = null)
     {
         var cancel = cancelIndex ?? buttons.Count - 1;
-        Title = "Screenshot";
+        Title = "Screenshotz";
         Width = notes is null ? 460 : 480;
         SizeToContent = SizeToContent.Height;
         ResizeMode = ResizeMode.NoResize;
@@ -95,7 +95,7 @@ internal static class AppAssets
     {
         var b = new BitmapImage();
         b.BeginInit();
-        b.UriSource = new Uri($"pack://application:,,,/Screenshot;component/{path}", UriKind.Absolute);
+        b.UriSource = new Uri($"pack://application:,,,/Screenshotz;component/{path}", UriKind.Absolute);
         b.CacheOption = BitmapCacheOption.OnLoad;
         b.EndInit();
         b.Freeze();

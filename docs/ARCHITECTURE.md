@@ -1,4 +1,4 @@
-# Screenshot — Architecture
+# Screenshotz — Architecture
 
 How the two apps are built: the stack, the code layout, the shared files, signing and the release pipeline.
 
@@ -99,7 +99,7 @@ tools/make-certs.sh         creates the signing certificates and secrets (SIGNIN
   - CI uses the matching entry as the GitHub release notes.
 - **`shared/about.json`:**
   ```json
-  { "name": "Ashwin Mathias", "role": "Creator of Screenshot", "dog": "Sparky", "sparkyNote": "…" }
+  { "name": "Ashwin Mathias", "role": "Creator of Screenshotz", "dog": "Sparky", "sparkyNote": "…" }
   ```
 - **`shared/testcases/`:** JSON files that **both** test suites load and run. A behaviour rule lives in one place, and a difference between the apps shows up as a failing test.
 
@@ -129,15 +129,15 @@ tools/make-certs.sh         creates the signing certificates and secrets (SIGNIN
 ### macOS
 - **`bash macos/scripts/build-app.sh`:**
   1. `swift build -c release --arch arm64 --arch x86_64`.
-  2. Assemble `dist/Screenshot.app`:
-     - `Contents/MacOS/Screenshot`;
+  2. Assemble `dist/Screenshotz.app`:
+     - `Contents/MacOS/Screenshotz`;
      - `Info.plist`;
      - `Resources/AppIcon.icns`, `changelog.json`, `about.json`, `avatar.png`, `sparky.jpg`.
   3. Sign with the certificate named in `MACOS_SIGN_IDENTITY`. Without it, sign ad-hoc for local builds and print a warning.
   4. Run `codesign --verify --strict` and `plutil -lint`.
-  5. Zip with `ditto -c -k --keepParent` to `dist/Screenshot-mac.zip`.
+  5. Zip with `ditto -c -k --keepParent` to `dist/Screenshotz-mac.zip`.
 - **Info.plist:**
-  - `CFBundleName` and `CFBundleDisplayName` "Screenshot";
+  - `CFBundleName` and `CFBundleDisplayName` "Screenshotz";
   - `CFBundleIdentifier` `local.ashwinmathias.Screenshot`;
   - `CFBundleShortVersionString` from `VERSION`;
   - `CFBundleVersion` = CI run number;
@@ -149,20 +149,29 @@ tools/make-certs.sh         creates the signing certificates and secrets (SIGNIN
     - Documents folder: "Save your screenshots in Documents/screenshots."
 
 ### Windows
+- **Two Windows builds from the same code**, chosen by `-Channel` (fixed at build time as the `Channel` assembly metadata, read by `AppInfo.IsStoreBuild`):
+
+  | | Store build (`-Channel store`) | Test build (`-Channel test`, default) |
+  |---|---|---|
+  | Identity | `AshwinMathias.Screenshotz`, `CN=7E8438D5-12B0-4FC0-9098-FE994BBCE149` | `AshwinMathias.Screenshot`, `CN=Ashwin Mathias` |
+  | Signed by | Microsoft, after upload (left unsigned) | our self-signed certificate |
+  | Output | `dist/Screenshotz-store-x64.msixupload` (a zip that holds the `.msix`) | `dist/Screenshotz-win-x64.msix` + `.sha256` + `Screenshotz-signing.cer` |
+  | Updates | Microsoft Store (UPD-007); updater code never runs | in-app updater from GitHub releases |
+
 - **`pwsh windows/scripts/build-msix.ps1`:**
   1. `dotnet publish src/Screenshot -c Release -r win-x64 --self-contained -p:PublishSingleFile=false`.
   2. Copy `AppxManifest.xml`, with the version filled in, plus the scale-200 logos as `Images/<name>.png` (no resource index, so no scale or theme variants yet).
-  3. `makeappx pack /d <folder> /p dist/Screenshot-win-x64.msix`.
+  3. `makeappx pack /d <folder> /p dist/Screenshotz-win-x64.msix`.
   4. `signtool sign /fd SHA256 /f <pfx> /p <password> /tr http://timestamp.digicert.com /td SHA256`.
      - Without the certificate, the package is left unsigned for local testing, with a warning.
-  5. `signtool verify /pa` (CI trusts the public certificate on the throwaway runner first), then write `<msix>.sha256` and `Screenshot-signing.cer`.
+  5. `signtool verify /pa` (CI trusts the public certificate on the throwaway runner first), then write `<msix>.sha256` and `Screenshotz-signing.cer`.
 - **AppxManifest.xml:**
   - `Identity Name="AshwinMathias.Screenshot" Publisher="CN=Ashwin Mathias" Version="X.Y.Z.0" ProcessorArchitecture="x64"`;
-  - `DisplayName` "Screenshot", `PublisherDisplayName` "Ashwin Mathias";
+  - `DisplayName` "Screenshotz", `PublisherDisplayName` "Ashwin Mathias";
   - `TargetDeviceFamily Windows.Desktop MinVersion="10.0.22000.0"`;
   - capability `runFullTrust`;
   - `uap:VisualElements` with the logos (Square44x44, Square150x150, Wide310x150, StoreLogo);
-  - extension `desktop:StartupTask TaskId="ScreenshotStartup" Enabled="false" DisplayName="Screenshot"`.
+  - extension `desktop:StartupTask TaskId="ScreenshotStartup" Enabled="false" DisplayName="Screenshotz"`.
 - **App manifest (`app.manifest`):** `PerMonitorV2` DPI awareness; `asInvoker`.
 - **Certificate pin:** the build passes the Windows certificate thumbprint (`WINDOWS_CERT_THUMBPRINT`) as `-p:WindowsCertThumbprint`, stored as assembly metadata and read by UPD-004. Local unsigned builds get an empty pin, so they never accept updates.
 - The MSIX version is `X.Y.Z.0`. The build number appears only in the About text, read from an assembly attribute.
@@ -201,12 +210,12 @@ tools/make-certs.sh         creates the signing certificates and secrets (SIGNIN
 - **Job `windows` (`windows-latest`):**
   1. `dotnet test`.
   2. Decode the PFX to `$RUNNER_TEMP` (pushes to `main` only).
-  3. `build-msix.ps1`, then compute SHA-256.
-  4. Upload the artifact.
+  3. `build-msix.ps1` twice: the signed test build and the Store build.
+  4. Upload both as artifacts.
 - **Job `release` (`ubuntu-latest`):**
   - Needs both jobs. Runs only on `main`, and only if tag `v$(cat VERSION)` doesn't exist yet.
   - Checks that `changelog.json`'s first entry matches `VERSION`, or fails with `::error::`.
-  - Creates the GitHub release `vX.Y.Z` with the five assets from SPEC §14. The body is that changelog entry.
+  - Creates the GitHub release `vX.Y.Z` with the assets from SPEC §14. The body is that changelog entry.
 - Compiler and test errors are turned into `::error::` annotations, so they are visible without opening the log.
 - Missing secrets on `main` fail the build with an `::error::` that names the secret.
 - **Pinning:** actions are pinned to commit SHAs, with the version in a comment.
@@ -216,4 +225,5 @@ tools/make-certs.sh         creates the signing certificates and secrets (SIGNIN
 1. Change the code and update the docs it touches (see CLAUDE.md).
 2. Bump `VERSION`. Add the changelog entry. If the shortcuts or install steps changed, update README.
 3. Push to `main`. Watch both CI jobs. The release is created only when every job passes.
-4. Install the update on both machines through **Check for Updates…** (this tests the updater too). Run the ACCEPTANCE items marked for that release.
+4. **Windows:** in Partner Center, start a new submission, upload `Screenshotz-store-x64.msixupload` from the release, update "What's new" from the changelog, and submit (STORE.md). It reaches PCs through the Store after certification, usually 1–3 days.
+5. **macOS:** install the update through **Check for Updates…** (this tests the updater too). Run the ACCEPTANCE items marked for that release on both machines.

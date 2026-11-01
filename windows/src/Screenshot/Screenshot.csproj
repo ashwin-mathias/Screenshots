@@ -5,13 +5,14 @@
     <SupportedOSPlatformVersion>10.0.22000.0</SupportedOSPlatformVersion>
     <UseWPF>true</UseWPF>
     <RootNamespace>Screenshot</RootNamespace>
-    <AssemblyName>Screenshot</AssemblyName>
+    <AssemblyName>Screenshotz</AssemblyName>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>..\..\..\shared\assets\icon\windows\AppIcon.ico</ApplicationIcon>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <Platforms>x64</Platforms>
     <!-- WPF's Fluent ThemeMode is marked experimental. -->
     <NoWarn>$(NoWarn);WPF0001</NoWarn>
+    <Channel Condition="'$(Channel)' == ''">test</Channel>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,6 +24,8 @@
   <ItemGroup>
     <AssemblyMetadata Include="CertThumbprint" Value="$(WindowsCertThumbprint)" />
     <AssemblyMetadata Include="BuildNumber" Value="$(BuildNumber)" />
+    <!-- "store" (Microsoft Store: no updater, UPD-007) or "test" (self-signed test build). -->
+    <AssemblyMetadata Include="Channel" Value="$(Channel)" />
   </ItemGroup>
 
   <!-- Shared files from the repo, copied next to the exe. -->

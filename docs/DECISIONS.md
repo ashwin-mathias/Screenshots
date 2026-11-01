@@ -1,4 +1,4 @@
-# Screenshot — Decisions and lessons
+# Screenshotz — Decisions and lessons
 
 Why the app is the way it is. Read this before changing behaviour, so settled questions aren't reopened by accident. Newest first.
 
@@ -21,8 +21,9 @@ Why the app is the way it is. Read this before changing behaviour, so settled qu
 | 0.5 | **Windows installs as MSIX** | Clean install and uninstall, built-in startup task, signed updates through `PackageManager` |
 | 0.5 | **Releases only when `VERSION` changes**; tags `vX.Y.Z`; one version for both apps | Every push builds and tests, but users only see real versions. One number avoids "Mac 0.5 vs Windows 0.5.3" confusion |
 | 0.5 | **Version restarts at 0.5.0** | Ashwin's choice; follows the 0.4 macOS app |
-| 0.5 | **Identity kept**: name "Screenshot", Mac bundle ID `local.ashwinmathias.Screenshot` (settings carry over from 0.4); Windows `AshwinMathias.Screenshot` | Continuity |
-| 0.5 | **Branding like couch-lab**: personal project; About has the author row (avatar, Ashwin Mathias, "Creator of Screenshot") and a **Sparky card** (photo + note). **No payment or QR codes** | A screenshot tool may be shared more widely than a TV app; keep payment handles out |
+| 0.5 | **The app is named Screenshotz everywhere** (Store, Start menu, Mac app, menus, windows, release files). Internal IDs stay: Mac bundle ID `local.ashwinmathias.Screenshot` (settings and Screen Recording permission carry over from 0.4), the sideload identity `AshwinMathias.Screenshot`, the repo name, and the certificate names. Saved files keep "Screenshot …" because there it describes the file | "Screenshot" was taken in the Microsoft Store. Ashwin chose one name everywhere over a Store-only name |
+| 0.5 | **Windows ships through the Microsoft Store** (free for individuals since 2025); the self-signed `.msix` stays for test builds | Removes the certificate step for everyone else; Microsoft signs Store builds |
+| 0.5 | **Branding like couch-lab**: personal project; About has the author row (avatar, Ashwin Mathias, "Creator of Screenshotz") and a **Sparky card** (photo + note). **No payment or QR codes** | A screenshot tool may be shared more widely than a TV app; keep payment handles out |
 | 0.5 | **Sparky card text:** "Designed with love for Sparky, who always camps out where I work." | Ashwin's wording |
 | 0.5 | **New app icon**, drawn from code (`tools/make-icons.py`): blue-to-teal tile, four white capture corners, centre crosshair; matching monochrome tray glyphs and a checkmark variant | Ashwin chose a new icon over recovering the 0.4 files. Generated from code, so every size stays consistent and easy to change |
 | 0.5 | Removed from the 0.4 spec: "Company Genentech", "Developed by Codex…" credit, the work-laptop path, and historical verification records | Personal app; the new docs describe the product, not one past build |

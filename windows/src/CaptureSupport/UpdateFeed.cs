@@ -32,8 +32,8 @@ public static class UpdateFeed
     public const string LatestReleaseApi = "https://api.github.com/repos/" + Repository + "/releases/latest";
     public const string DownloadPrefix = "https://github.com/" + Repository + "/releases/download/";
     public const string ReleasesPage = "https://github.com/" + Repository + "/releases/latest";
-    public const string WindowsAsset = "Screenshot-win-x64.msix";
-    public const string MacAsset = "Screenshot-mac.zip";
+    public const string WindowsAsset = "Screenshotz-win-x64.msix";
+    public const string MacAsset = "Screenshotz-mac.zip";
 
     public static UpdateCheckResult Evaluate(
         string releaseJson,

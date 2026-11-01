@@ -1,4 +1,4 @@
-# Working on Screenshot
+# Working on Screenshotz
 
 Read `docs/README.md` first. The docs in `docs/` are the source of truth for behaviour, design and architecture, on **both** platforms.
 

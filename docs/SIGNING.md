@@ -1,4 +1,4 @@
-# Screenshot — Signing certificates
+# Screenshotz — Signing certificates
 
 How to create the two free, self-signed certificates that CI uses to sign the apps (ARCHITECTURE §8). You do this **once**.
 
@@ -35,7 +35,7 @@ The recommended way is **§1, a Codespace**: one script creates both certificate
 5. In the Explorer on the left, right-click each file in `.signing-backup/` → **Download…**. Add them to your password manager next to the passwords:
    - `screenshot-mac-signing.p12`
    - `screenshot-win-signing.pfx`
-   - `Screenshot-signing.cer`
+   - `Screenshot-signing.cer` (the script keeps this file name; it's the same certificate the releases publish as `Screenshotz-signing.cer`)
    - `README.txt`
 6. Clean up:
    ```sh
@@ -71,7 +71,7 @@ $cert = New-SelfSignedCertificate -Type Custom -Subject "CN=Ashwin Mathias" `
   -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.3", "2.5.29.19={text}")
 $pw = Read-Host -AsSecureString "Choose a password for the .pfx"
 Export-PfxCertificate -Cert $cert -FilePath "$HOME\Desktop\screenshot-win-signing.pfx" -Password $pw
-Export-Certificate -Cert $cert -FilePath "$HOME\Desktop\Screenshot-signing.cer"
+Export-Certificate -Cert $cert -FilePath "$HOME\Desktop\Screenshotz-signing.cer"
 $cert.Thumbprint
 [Convert]::ToBase64String([IO.File]::ReadAllBytes("$HOME\Desktop\screenshot-win-signing.pfx")) | Set-Clipboard
 ```
@@ -86,12 +86,12 @@ $cert.Thumbprint
 
 ## 3. Trust the Windows certificate on your PC (once per PC)
 
-Windows installs the app only from a publisher it trusts. Use the `Screenshot-signing.cer` you downloaded. Later PCs can get it from any release page.
+Windows installs the app only from a publisher it trusts. Use `Screenshot-signing.cer` from your backup, or `Screenshotz-signing.cer` from a release page or test build (same certificate). Later PCs can get it from any release page.
 
-- **Click-through:** double-click `Screenshot-signing.cer` → **Install Certificate…** → **Local Machine** → **Place all certificates in the following store** → **Browse** → **Trusted People** → **Finish**.
+- **Click-through:** double-click `Screenshotz-signing.cer` → **Install Certificate…** → **Local Machine** → **Place all certificates in the following store** → **Browse** → **Trusted People** → **Finish**.
 - **Or PowerShell as administrator:**
   ```powershell
-  Import-Certificate -FilePath "$env:USERPROFILE\Downloads\Screenshot-signing.cer" -CertStoreLocation Cert:\LocalMachine\TrustedPeople
+  Import-Certificate -FilePath "$env:USERPROFILE\Downloads\Screenshotz-signing.cer" -CertStoreLocation Cert:\LocalMachine\TrustedPeople
   ```
 
 Macs need nothing now. The first time you open the app, allow it once under **System Settings → Privacy & Security → Open Anyway** (README).
@@ -109,7 +109,7 @@ Macs need nothing now. The first time you open the app, allow it once under **Sy
 | | What happens | What to do |
 |---|---|---|
 | **macOS** | Updates fail the certificate check (UPD-004); macOS asks for Screen Recording permission again | Make a new certificate with the same name, update the secrets, release, and install that release by hand once on each Mac |
-| **Windows** | A new certificate is a new publisher, so Windows treats the app as a different one | Make a new certificate with the same subject, update the secrets, release; on each PC uninstall Screenshot, trust the new `.cer` and install the new `.msix` |
+| **Windows** | A new certificate is a new publisher, so Windows treats the app as a different one | Make a new certificate with the same subject, update the secrets, release; on each PC uninstall Screenshotz, trust the new `.cer` and install the new `.msix` |
 | **Leaked** (either) | Someone could sign a fake update | Replace it at once as above |
 | **Restore from backup** | — | Add the backed-up `.p12` / `.pfx` (as base64) and their passwords as secrets again; nothing changes for installed apps |
 

@@ -17,7 +17,7 @@ internal sealed class HelpAboutWindow : Window
 
     public HelpAboutWindow()
     {
-        Title = "Help & About Screenshot";
+        Title = "Help & About Screenshotz";
         Width = 620;
         Height = 540;
         MinWidth = 520;
@@ -53,7 +53,7 @@ internal sealed class HelpAboutWindow : Window
         var panel = new StackPanel { Margin = new Thickness(24) };
 
         var app = Row(Circle(AppAssets.Icon, 64, round: false),
-            Text("Screenshot", 20, FontWeights.SemiBold),
+            Text("Screenshotz", 20, FontWeights.SemiBold),
             Secondary($"Version {AppInfo.VersionWithBuild}"));
         panel.Children.Add(app);
 
@@ -97,11 +97,16 @@ internal sealed class HelpAboutWindow : Window
 
     // ---- How to Use (HELP-002) ----------------------------------------------------------------
 
+    private static string UpdatesHelp => AppInfo.IsStoreBuild
+        ? "Launch at Login starts Screenshotz when you sign in. The Microsoft Store keeps Screenshotz up to date; Check for Updates… opens its Store page."
+        : "Launch at Login starts Screenshotz when you sign in. Screenshotz checks GitHub for updates once a day and always asks before installing; " +
+          "turn this off with Check for Updates Automatically.";
+
     private static readonly (string Heading, string Body)[] Help =
     [
         ("Capture and paste",
             "Press Alt+S (or Print Screen, if you turned it on), let go of the keys, then drag across the area you want. " +
-            "Screenshot saves it as a PNG and copies the image, so you can paste it straight away with Ctrl+V. Press Esc or right-click to cancel."),
+            "Screenshotz saves it as a PNG and copies the image, so you can paste it straight away with Ctrl+V. Press Esc or right-click to cancel."),
         ("Where files go",
             "Screenshots are saved in Documents\\screenshots, named like \"Screenshot 2026-11-01 at 14.03.27.125-….png\". Nothing is ever overwritten or deleted."),
         ("One display at a time",
@@ -110,7 +115,7 @@ internal sealed class HelpAboutWindow : Window
             "After a capture, a small preview appears in the corner for 8 seconds. It never takes your typing focus. Hover over it to keep it open; " +
             "it closes 8 seconds after you move away. Copy, Reveal and Mark Up act on that file. Turn it off with Show Thumbnail After Capture."),
         ("Last in this session, or newest on disk",
-            "Reveal Last Screenshot shows the last capture since Screenshot started. Show Last Screenshot Preview shows the newest PNG in the folder, " +
+            "Reveal Last Screenshot shows the last capture since Screenshotz started. Show Last Screenshot Preview shows the newest PNG in the folder, " +
             "even after a restart. Editing an older file can make it the newest."),
         ("Recent Screenshots",
             "The newest 20 PNG files in the folder, read fresh each time. Each has Open, Copy Image, Show in File Explorer, Show Preview and Mark Up in Paint."),
@@ -121,12 +126,10 @@ internal sealed class HelpAboutWindow : Window
             "Windows normally uses Print Screen for its own tool. To use it here, turn off \"Use the Print screen key to open screen capture\" " +
             "in Settings → Accessibility → Keyboard, then turn on Enable Print Screen Shortcut."),
         ("Finding the icon",
-            "Windows may hide new icons. Click ^ next to the clock and drag Screenshot onto the taskbar to keep it visible."),
-        ("Launch at login and updates",
-            "Launch at Login starts Screenshot when you sign in. Screenshot checks GitHub for updates once a day and always asks before installing; " +
-            "turn this off with Check for Updates Automatically."),
+            "Windows may hide new icons. Click ^ next to the clock and drag Screenshotz onto the taskbar to keep it visible."),
+        ("Launch at login and updates", UpdatesHelp),
         ("Closing and quitting",
-            "Closing a window leaves Screenshot running in the tray. Choose Quit Screenshot to stop it."),
+            "Closing a window leaves Screenshotz running in the tray. Choose Quit Screenshotz to stop it."),
     ];
 
     private static UIElement HowToUse()
@@ -191,7 +194,7 @@ internal sealed class HelpAboutWindow : Window
     {
         var brush = new ImageBrush(source) { Stretch = Stretch.UniformToFill };
         var e = new Border { Width = size, Height = size, CornerRadius = new CornerRadius(round ? size / 2 : 0), Background = brush };
-        System.Windows.Automation.AutomationProperties.SetName(e, round ? "Photo" : "Screenshot icon");
+        System.Windows.Automation.AutomationProperties.SetName(e, round ? "Photo" : "Screenshotz icon");
         return e;
     }
 
@@ -224,7 +227,7 @@ internal sealed record AboutInfo(string Name, string Role, string SparkyNote)
 {
     public static AboutInfo Load()
     {
-        var fallback = new AboutInfo("Ashwin Mathias", "Creator of Screenshot", "Designed with love for Sparky, who always camps out where I work.");
+        var fallback = new AboutInfo("Ashwin Mathias", "Creator of Screenshotz", "Designed with love for Sparky, who always camps out where I work.");
         try
         {
             using var doc = JsonDocument.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Assets", "about.json")));
