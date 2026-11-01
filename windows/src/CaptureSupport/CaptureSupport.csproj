@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Platform-neutral rules shared with the macOS app through shared/testcases. No UI, no Win32. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>Screenshot.Support</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Microsoft package: reads the signer of an .msix update (UPD-004). -->
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.14" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="CaptureSupport.Tests" />
+  </ItemGroup>
+</Project>

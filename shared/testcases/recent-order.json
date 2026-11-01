@@ -1,0 +1,253 @@
+{
+  "notes": "REC-002. Create these entries in an empty temp folder (kind: file, directory, symlink, hiddenAttribute), set each mtime, then scan with each limit. Expected is the exact order of file names.",
+  "fixtures": [
+    {
+      "name": "01.png",
+      "kind": "file",
+      "mtime": "2026-10-01T12:00:00Z"
+    },
+    {
+      "name": "02.png",
+      "kind": "file",
+      "mtime": "2026-10-02T12:00:00Z"
+    },
+    {
+      "name": "03.png",
+      "kind": "file",
+      "mtime": "2026-10-03T12:00:00Z"
+    },
+    {
+      "name": "04.png",
+      "kind": "file",
+      "mtime": "2026-10-04T12:00:00Z"
+    },
+    {
+      "name": "05.png",
+      "kind": "file",
+      "mtime": "2026-10-05T12:00:00Z"
+    },
+    {
+      "name": "06.png",
+      "kind": "file",
+      "mtime": "2026-10-06T12:00:00Z"
+    },
+    {
+      "name": "07.png",
+      "kind": "file",
+      "mtime": "2026-10-07T12:00:00Z"
+    },
+    {
+      "name": "08.png",
+      "kind": "file",
+      "mtime": "2026-10-08T12:00:00Z"
+    },
+    {
+      "name": "09.png",
+      "kind": "file",
+      "mtime": "2026-10-09T12:00:00Z"
+    },
+    {
+      "name": "10.png",
+      "kind": "file",
+      "mtime": "2026-10-10T12:00:00Z"
+    },
+    {
+      "name": "11.png",
+      "kind": "file",
+      "mtime": "2026-10-11T12:00:00Z"
+    },
+    {
+      "name": "12.png",
+      "kind": "file",
+      "mtime": "2026-10-12T12:00:00Z"
+    },
+    {
+      "name": "13.png",
+      "kind": "file",
+      "mtime": "2026-10-13T12:00:00Z"
+    },
+    {
+      "name": "14.png",
+      "kind": "file",
+      "mtime": "2026-10-14T12:00:00Z"
+    },
+    {
+      "name": "15.png",
+      "kind": "file",
+      "mtime": "2026-10-15T12:00:00Z"
+    },
+    {
+      "name": "16.png",
+      "kind": "file",
+      "mtime": "2026-10-16T12:00:00Z"
+    },
+    {
+      "name": "17.png",
+      "kind": "file",
+      "mtime": "2026-10-17T12:00:00Z"
+    },
+    {
+      "name": "18.png",
+      "kind": "file",
+      "mtime": "2026-10-18T12:00:00Z"
+    },
+    {
+      "name": "19.png",
+      "kind": "file",
+      "mtime": "2026-10-19T12:00:00Z"
+    },
+    {
+      "name": "20.png",
+      "kind": "file",
+      "mtime": "2026-10-20T12:00:00Z"
+    },
+    {
+      "name": "21.png",
+      "kind": "file",
+      "mtime": "2026-10-21T12:00:00Z"
+    },
+    {
+      "name": "22.png",
+      "kind": "file",
+      "mtime": "2026-10-22T12:00:00Z"
+    },
+    {
+      "name": "23.png",
+      "kind": "file",
+      "mtime": "2026-10-23T12:00:00Z"
+    },
+    {
+      "name": "24.png",
+      "kind": "file",
+      "mtime": "2026-10-24T12:00:00Z"
+    },
+    {
+      "name": "25.png",
+      "kind": "file",
+      "mtime": "2026-10-25T12:00:00Z"
+    },
+    {
+      "name": "UPPER.PNG",
+      "kind": "file",
+      "mtime": "2026-10-24T12:00:00Z",
+      "note": "same time as 24.png; ties sort by name, '2' before 'U'"
+    },
+    {
+      "name": ".hidden.png",
+      "kind": "file",
+      "mtime": "2026-10-30T12:00:00Z",
+      "note": "hidden by name"
+    },
+    {
+      "name": "attr-hidden.png",
+      "kind": "hiddenAttribute",
+      "mtime": "2026-10-30T12:00:00Z",
+      "note": "Windows Hidden attribute; skipped on macOS"
+    },
+    {
+      "name": "photo.jpg",
+      "kind": "file",
+      "mtime": "2026-10-30T12:00:00Z",
+      "note": "not a PNG"
+    },
+    {
+      "name": "dir.png",
+      "kind": "directory",
+      "mtime": "2026-10-30T12:00:00Z",
+      "note": "a folder"
+    },
+    {
+      "name": "link.png",
+      "kind": "symlink",
+      "target": "25.png",
+      "mtime": "2026-10-30T12:00:00Z",
+      "note": "a link"
+    },
+    {
+      "name": "nested/26.png",
+      "kind": "file",
+      "mtime": "2026-10-30T12:00:00Z",
+      "note": "in a subfolder"
+    }
+  ],
+  "scans": [
+    {
+      "limit": 20,
+      "expected": [
+        "25.png",
+        "24.png",
+        "UPPER.PNG",
+        "23.png",
+        "22.png",
+        "21.png",
+        "20.png",
+        "19.png",
+        "18.png",
+        "17.png",
+        "16.png",
+        "15.png",
+        "14.png",
+        "13.png",
+        "12.png",
+        "11.png",
+        "10.png",
+        "09.png",
+        "08.png",
+        "07.png"
+      ]
+    },
+    {
+      "limit": 1,
+      "expected": [
+        "25.png"
+      ]
+    },
+    {
+      "limit": 3,
+      "expected": [
+        "25.png",
+        "24.png",
+        "UPPER.PNG"
+      ]
+    },
+    {
+      "limit": 0,
+      "expected": []
+    },
+    {
+      "limit": -1,
+      "expected": []
+    },
+    {
+      "limit": 100,
+      "expected": [
+        "25.png",
+        "24.png",
+        "UPPER.PNG",
+        "23.png",
+        "22.png",
+        "21.png",
+        "20.png",
+        "19.png",
+        "18.png",
+        "17.png",
+        "16.png",
+        "15.png",
+        "14.png",
+        "13.png",
+        "12.png",
+        "11.png",
+        "10.png",
+        "09.png",
+        "08.png",
+        "07.png",
+        "06.png",
+        "05.png",
+        "04.png",
+        "03.png",
+        "02.png",
+        "01.png"
+      ]
+    }
+  ]
+}

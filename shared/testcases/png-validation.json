@@ -1,0 +1,12 @@
+{
+  "notes": "STO-002 signature check. 'hex' is the start of the file. A file must also decode with width and height above zero; that part is tested per platform with generated images.",
+  "cases": [
+    { "hex": "89504E470D0A1A0A0000000D49484452", "png": true },
+    { "hex": "89504E470D0A1A0A", "png": true },
+    { "hex": "89504E470D0A1A", "png": false },
+    { "hex": "89504E470D0A1A0B", "png": false },
+    { "hex": "FFD8FFE000104A464946", "png": false },
+    { "hex": "474946383961", "png": false },
+    { "hex": "", "png": false }
+  ]
+}

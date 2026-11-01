@@ -1,0 +1,501 @@
+{
+  "notes": "UPD-002/003. 'release' is GitHub's /releases/latest JSON (trimmed). Each platform looks for its own asset (macOS Screenshot-mac.zip, Windows Screenshot-win-x64.msix) plus '<asset>.sha256'. Links must start with 'prefix'. When offered, the asset and checksum links are '<prefix><tag>/<name>'. skipped and manual default to null and false.",
+  "prefix": "https://github.com/ashwin-mathias/Screenshots/releases/download/",
+  "cases": [
+    {
+      "name": "newer release is offered",
+      "release": {
+        "tag_name": "v0.6.0",
+        "draft": false,
+        "prerelease": false,
+        "body": "New things",
+        "assets": [
+          {
+            "name": "Screenshot-mac.zip",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-mac.zip"
+          },
+          {
+            "name": "Screenshot-mac.zip.sha256",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-mac.zip.sha256"
+          },
+          {
+            "name": "Screenshot-win-x64.msix",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-win-x64.msix"
+          },
+          {
+            "name": "Screenshot-win-x64.msix.sha256",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-win-x64.msix.sha256"
+          },
+          {
+            "name": "Screenshot-signing.cer",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-signing.cer"
+          }
+        ]
+      },
+      "current": "0.5.0",
+      "expected": {
+        "offer": "0.6.0",
+        "notes": "New things"
+      }
+    },
+    {
+      "name": "same version",
+      "release": {
+        "tag_name": "v0.5.0",
+        "draft": false,
+        "prerelease": false,
+        "body": "Notes",
+        "assets": [
+          {
+            "name": "Screenshot-mac.zip",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.5.0/Screenshot-mac.zip"
+          },
+          {
+            "name": "Screenshot-mac.zip.sha256",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.5.0/Screenshot-mac.zip.sha256"
+          },
+          {
+            "name": "Screenshot-win-x64.msix",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.5.0/Screenshot-win-x64.msix"
+          },
+          {
+            "name": "Screenshot-win-x64.msix.sha256",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.5.0/Screenshot-win-x64.msix.sha256"
+          },
+          {
+            "name": "Screenshot-signing.cer",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.5.0/Screenshot-signing.cer"
+          }
+        ]
+      },
+      "current": "0.5.0",
+      "expected": {
+        "ignore": "upToDate"
+      }
+    },
+    {
+      "name": "older version",
+      "release": {
+        "tag_name": "v0.4.0",
+        "draft": false,
+        "prerelease": false,
+        "body": "Notes",
+        "assets": [
+          {
+            "name": "Screenshot-mac.zip",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.4.0/Screenshot-mac.zip"
+          },
+          {
+            "name": "Screenshot-mac.zip.sha256",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.4.0/Screenshot-mac.zip.sha256"
+          },
+          {
+            "name": "Screenshot-win-x64.msix",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.4.0/Screenshot-win-x64.msix"
+          },
+          {
+            "name": "Screenshot-win-x64.msix.sha256",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.4.0/Screenshot-win-x64.msix.sha256"
+          },
+          {
+            "name": "Screenshot-signing.cer",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.4.0/Screenshot-signing.cer"
+          }
+        ]
+      },
+      "current": "0.5.0",
+      "expected": {
+        "ignore": "upToDate"
+      }
+    },
+    {
+      "name": "bad tag",
+      "release": {
+        "tag_name": "build-40",
+        "draft": false,
+        "prerelease": false,
+        "body": "Notes",
+        "assets": [
+          {
+            "name": "Screenshot-mac.zip",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-mac.zip"
+          },
+          {
+            "name": "Screenshot-mac.zip.sha256",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-mac.zip.sha256"
+          },
+          {
+            "name": "Screenshot-win-x64.msix",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-win-x64.msix"
+          },
+          {
+            "name": "Screenshot-win-x64.msix.sha256",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-win-x64.msix.sha256"
+          },
+          {
+            "name": "Screenshot-signing.cer",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-signing.cer"
+          }
+        ]
+      },
+      "current": "0.5.0",
+      "expected": {
+        "ignore": "invalidTag"
+      }
+    },
+    {
+      "name": "draft",
+      "release": {
+        "tag_name": "v0.6.0",
+        "draft": true,
+        "prerelease": false,
+        "body": "Notes",
+        "assets": [
+          {
+            "name": "Screenshot-mac.zip",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-mac.zip"
+          },
+          {
+            "name": "Screenshot-mac.zip.sha256",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-mac.zip.sha256"
+          },
+          {
+            "name": "Screenshot-win-x64.msix",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-win-x64.msix"
+          },
+          {
+            "name": "Screenshot-win-x64.msix.sha256",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-win-x64.msix.sha256"
+          },
+          {
+            "name": "Screenshot-signing.cer",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-signing.cer"
+          }
+        ]
+      },
+      "current": "0.5.0",
+      "expected": {
+        "ignore": "draft"
+      }
+    },
+    {
+      "name": "pre-release",
+      "release": {
+        "tag_name": "v0.6.0",
+        "draft": false,
+        "prerelease": true,
+        "body": "Notes",
+        "assets": [
+          {
+            "name": "Screenshot-mac.zip",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-mac.zip"
+          },
+          {
+            "name": "Screenshot-mac.zip.sha256",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-mac.zip.sha256"
+          },
+          {
+            "name": "Screenshot-win-x64.msix",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-win-x64.msix"
+          },
+          {
+            "name": "Screenshot-win-x64.msix.sha256",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-win-x64.msix.sha256"
+          },
+          {
+            "name": "Screenshot-signing.cer",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-signing.cer"
+          }
+        ]
+      },
+      "current": "0.5.0",
+      "expected": {
+        "ignore": "prerelease"
+      }
+    },
+    {
+      "name": "no app file for this platform",
+      "release": {
+        "tag_name": "v0.6.0",
+        "draft": false,
+        "prerelease": false,
+        "body": "Notes",
+        "assets": [
+          {
+            "name": "Screenshot-signing.cer",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-signing.cer"
+          }
+        ]
+      },
+      "current": "0.5.0",
+      "expected": {
+        "ignore": "missingAsset"
+      }
+    },
+    {
+      "name": "no checksum file",
+      "release": {
+        "tag_name": "v0.6.0",
+        "draft": false,
+        "prerelease": false,
+        "body": "Notes",
+        "assets": [
+          {
+            "name": "Screenshot-mac.zip",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-mac.zip"
+          },
+          {
+            "name": "Screenshot-win-x64.msix",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-win-x64.msix"
+          }
+        ]
+      },
+      "current": "0.5.0",
+      "expected": {
+        "ignore": "missingChecksum"
+      }
+    },
+    {
+      "name": "app file on another host",
+      "release": {
+        "tag_name": "v0.6.0",
+        "draft": false,
+        "prerelease": false,
+        "body": "Notes",
+        "assets": [
+          {
+            "name": "Screenshot-mac.zip",
+            "browser_download_url": "https://evil.example/Screenshot-mac.zip"
+          },
+          {
+            "name": "Screenshot-mac.zip.sha256",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-mac.zip.sha256"
+          },
+          {
+            "name": "Screenshot-win-x64.msix",
+            "browser_download_url": "https://evil.example/Screenshot-win-x64.msix"
+          },
+          {
+            "name": "Screenshot-win-x64.msix.sha256",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-win-x64.msix.sha256"
+          }
+        ]
+      },
+      "current": "0.5.0",
+      "expected": {
+        "ignore": "badUrl"
+      }
+    },
+    {
+      "name": "app file over http",
+      "release": {
+        "tag_name": "v0.6.0",
+        "draft": false,
+        "prerelease": false,
+        "body": "Notes",
+        "assets": [
+          {
+            "name": "Screenshot-mac.zip",
+            "browser_download_url": "http://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-mac.zip"
+          },
+          {
+            "name": "Screenshot-mac.zip.sha256",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-mac.zip.sha256"
+          },
+          {
+            "name": "Screenshot-win-x64.msix",
+            "browser_download_url": "http://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-win-x64.msix"
+          },
+          {
+            "name": "Screenshot-win-x64.msix.sha256",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-win-x64.msix.sha256"
+          }
+        ]
+      },
+      "current": "0.5.0",
+      "expected": {
+        "ignore": "badUrl"
+      }
+    },
+    {
+      "name": "checksum from another repo",
+      "release": {
+        "tag_name": "v0.6.0",
+        "draft": false,
+        "prerelease": false,
+        "body": "Notes",
+        "assets": [
+          {
+            "name": "Screenshot-mac.zip",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-mac.zip"
+          },
+          {
+            "name": "Screenshot-mac.zip.sha256",
+            "browser_download_url": "https://github.com/someone/else/releases/download/v0.6.0/Screenshot-mac.zip.sha256"
+          },
+          {
+            "name": "Screenshot-win-x64.msix",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-win-x64.msix"
+          },
+          {
+            "name": "Screenshot-win-x64.msix.sha256",
+            "browser_download_url": "https://github.com/someone/else/releases/download/v0.6.0/Screenshot-win-x64.msix.sha256"
+          }
+        ]
+      },
+      "current": "0.5.0",
+      "expected": {
+        "ignore": "badUrl"
+      }
+    },
+    {
+      "name": "skipped version, automatic check",
+      "release": {
+        "tag_name": "v0.6.0",
+        "draft": false,
+        "prerelease": false,
+        "body": "Notes",
+        "assets": [
+          {
+            "name": "Screenshot-mac.zip",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-mac.zip"
+          },
+          {
+            "name": "Screenshot-mac.zip.sha256",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-mac.zip.sha256"
+          },
+          {
+            "name": "Screenshot-win-x64.msix",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-win-x64.msix"
+          },
+          {
+            "name": "Screenshot-win-x64.msix.sha256",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-win-x64.msix.sha256"
+          },
+          {
+            "name": "Screenshot-signing.cer",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-signing.cer"
+          }
+        ]
+      },
+      "current": "0.5.0",
+      "skipped": "0.6.0",
+      "manual": false,
+      "expected": {
+        "ignore": "skipped"
+      }
+    },
+    {
+      "name": "skipped version, manual check",
+      "release": {
+        "tag_name": "v0.6.0",
+        "draft": false,
+        "prerelease": false,
+        "body": "New things",
+        "assets": [
+          {
+            "name": "Screenshot-mac.zip",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-mac.zip"
+          },
+          {
+            "name": "Screenshot-mac.zip.sha256",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-mac.zip.sha256"
+          },
+          {
+            "name": "Screenshot-win-x64.msix",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-win-x64.msix"
+          },
+          {
+            "name": "Screenshot-win-x64.msix.sha256",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-win-x64.msix.sha256"
+          },
+          {
+            "name": "Screenshot-signing.cer",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-signing.cer"
+          }
+        ]
+      },
+      "current": "0.5.0",
+      "skipped": "0.6.0",
+      "manual": true,
+      "expected": {
+        "offer": "0.6.0",
+        "notes": "New things"
+      }
+    },
+    {
+      "name": "an older skip doesn't block a newer version",
+      "release": {
+        "tag_name": "v0.7.0",
+        "draft": false,
+        "prerelease": false,
+        "body": "Later",
+        "assets": [
+          {
+            "name": "Screenshot-mac.zip",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.7.0/Screenshot-mac.zip"
+          },
+          {
+            "name": "Screenshot-mac.zip.sha256",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.7.0/Screenshot-mac.zip.sha256"
+          },
+          {
+            "name": "Screenshot-win-x64.msix",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.7.0/Screenshot-win-x64.msix"
+          },
+          {
+            "name": "Screenshot-win-x64.msix.sha256",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.7.0/Screenshot-win-x64.msix.sha256"
+          },
+          {
+            "name": "Screenshot-signing.cer",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.7.0/Screenshot-signing.cer"
+          }
+        ]
+      },
+      "current": "0.5.0",
+      "skipped": "0.6.0",
+      "manual": false,
+      "expected": {
+        "offer": "0.7.0",
+        "notes": "Later"
+      }
+    },
+    {
+      "name": "missing body",
+      "release": {
+        "tag_name": "v0.6.0",
+        "draft": false,
+        "prerelease": false,
+        "body": null,
+        "assets": [
+          {
+            "name": "Screenshot-mac.zip",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-mac.zip"
+          },
+          {
+            "name": "Screenshot-mac.zip.sha256",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-mac.zip.sha256"
+          },
+          {
+            "name": "Screenshot-win-x64.msix",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-win-x64.msix"
+          },
+          {
+            "name": "Screenshot-win-x64.msix.sha256",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-win-x64.msix.sha256"
+          },
+          {
+            "name": "Screenshot-signing.cer",
+            "browser_download_url": "https://github.com/ashwin-mathias/Screenshots/releases/download/v0.6.0/Screenshot-signing.cer"
+          }
+        ]
+      },
+      "current": "0.5.0",
+      "expected": {
+        "offer": "0.6.0",
+        "notes": ""
+      }
+    }
+  ]
+}

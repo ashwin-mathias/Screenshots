@@ -1,0 +1,13 @@
+{
+  "notes": "REC-003. Remove the .png extension (any case), then a trailing '-<UUID>' (8-4-4-4-12 hex, any case) if present.",
+  "cases": [
+    { "file": "Screenshot 2026-11-01 at 14.03.27.125-550E8400-E29B-41D4-A716-446655440000.png", "expected": "Screenshot 2026-11-01 at 14.03.27.125" },
+    { "file": "Screenshot 2026-11-01 at 14.03.27.125-550e8400-e29b-41d4-a716-446655440000.PNG", "expected": "Screenshot 2026-11-01 at 14.03.27.125" },
+    { "file": "holiday.PNG", "expected": "holiday" },
+    { "file": "notes-550E8400.png", "expected": "notes-550E8400" },
+    { "file": "550E8400-E29B-41D4-A716-446655440000.png", "expected": "550E8400-E29B-41D4-A716-446655440000" },
+    { "file": "a-550E8400-E29B-41D4-A716-446655440000-copy.png", "expected": "a-550E8400-E29B-41D4-A716-446655440000-copy" },
+    { "file": "Screenshot-550E8400-E29B-41D4-A716-44665544000.png", "expected": "Screenshot-550E8400-E29B-41D4-A716-44665544000" },
+    { "file": "x-GGGGGGGG-E29B-41D4-A716-446655440000.png", "expected": "x-GGGGGGGG-E29B-41D4-A716-446655440000" }
+  ]
+}
