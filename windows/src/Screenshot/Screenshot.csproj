@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.22621.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.22000.0</SupportedOSPlatformVersion>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>Screenshot</RootNamespace>
+    <AssemblyName>Screenshot</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>..\..\..\shared\assets\icon\windows\AppIcon.ico</ApplicationIcon>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <Platforms>x64</Platforms>
+    <!-- WPF's Fluent ThemeMode is marked experimental. -->
+    <NoWarn>$(NoWarn);WPF0001</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../CaptureSupport/CaptureSupport.csproj" />
+    <ProjectReference Include="../CaptureSupport.Windows/CaptureSupport.Windows.csproj" />
+  </ItemGroup>
+
+  <!-- The certificate the updater trusts (UPD-004). Empty for local builds, so they never install updates. -->
+  <ItemGroup>
+    <AssemblyMetadata Include="CertThumbprint" Value="$(WindowsCertThumbprint)" />
+    <AssemblyMetadata Include="BuildNumber" Value="$(BuildNumber)" />
+  </ItemGroup>
+
+  <!-- Shared files from the repo, copied next to the exe. -->
+  <ItemGroup>
+    <Content Include="..\..\..\shared\changelog.json" Link="Assets\changelog.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\..\..\shared\about.json" Link="Assets\about.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\..\..\shared\assets\icon\windows\tray\*.ico" Link="Assets\tray\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <Resource Include="..\..\..\shared\assets\avatar.png" Link="Assets\avatar.png" />
+    <Resource Include="..\..\..\shared\assets\sparky.jpg" Link="Assets\sparky.jpg" />
+    <Resource Include="..\..\..\shared\assets\icon\windows\Square150x150Logo.scale-200.png" Link="Assets\AppIcon.png" />
+  </ItemGroup>
+</Project>

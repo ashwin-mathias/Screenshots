@@ -12,6 +12,7 @@ obj/
 .vs/
 *.user
 windows/dist/
+windows/out/
 TestResults/
 
 # Generated
