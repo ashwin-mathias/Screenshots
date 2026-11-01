@@ -1,0 +1,14 @@
+[
+  {
+    "version": "0.5.0",
+    "date": "2026-11-01",
+    "title": "Screenshot for Mac and Windows",
+    "notes": [
+      "New Windows 11 app with the same features as the Mac app.",
+      "Windows shortcuts: Alt+S, and Print Screen if you turn it on.",
+      "Checks GitHub for updates and installs them only when you agree.",
+      "Updates keep your settings, and on the Mac your Screen Recording permission.",
+      "New About page with release history."
+    ]
+  }
+]

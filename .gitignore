@@ -1,0 +1,29 @@
+# macOS / Swift
+.DS_Store
+.build/
+.swiftpm/
+macos/dist/
+*.xcuserstate
+xcuserdata/
+
+# Windows / .NET
+bin/
+obj/
+.vs/
+*.user
+windows/dist/
+TestResults/
+
+# Generated
+docs/screenshot-rebuild-context.md
+dist/
+
+# Signing material lives in GitHub Actions secrets, never in the repo
+*.p12
+*.pfx
+*.cer
+*.key
+*.pem
+*.keychain
+*.keychain-db
+review/
