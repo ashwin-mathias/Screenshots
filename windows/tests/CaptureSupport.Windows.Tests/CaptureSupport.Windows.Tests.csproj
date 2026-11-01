@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Runs on Windows only (CI). -->
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>Screenshot.Support.Windows.Tests</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="MSTest" Version="4.5.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/CaptureSupport.Windows/CaptureSupport.Windows.csproj" />
+  </ItemGroup>
+</Project>
