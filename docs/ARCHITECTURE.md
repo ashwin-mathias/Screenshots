@@ -45,7 +45,9 @@ windows/
   packaging/AppxManifest.xml, Images/
   scripts/build-msix.ps1
 tools/make-icons.py         generates shared/assets/icon/*
+tools/make-certs.sh         creates the signing certificates and secrets (SIGNING.md)
 .github/workflows/build.yml
+.github/workflows/check-signing.yml   one-off check that both certificates sign
 ```
 
 ## 3. Stack
@@ -163,6 +165,11 @@ tools/make-icons.py         generates shared/assets/icon/*
 ## 8. Signing, CI and releases
 
 ### Certificates (created once by Ashwin; step-by-step in [SIGNING.md](SIGNING.md))
+- **Recommended:** `tools/make-certs.sh` in a Codespace creates both certificates with `openssl`.
+  - It exports them as `.p12` / `.pfx` in the classic **PBE-SHA1-3DES / SHA-1 MAC** format, because some macOS versions can't import OpenSSL 3's default AES format.
+  - It checks its own output, saves the five secrets with `gh secret set`, and leaves a git-ignored `.signing-backup/` to download.
+- **Proof:** `.github/workflows/check-signing.yml` (run by hand) imports and signs a test program on a macOS and a Windows runner.
+- The manual Keychain Access / PowerShell route below is the fallback.
 - **macOS:**
   - A self-signed **Code Signing** certificate named "Screenshot Signing (Ashwin Mathias)", made in Keychain Access → Certificate Assistant → Create a Certificate (type: Code Signing), valid 10 years.
   - Export it as `.p12`.

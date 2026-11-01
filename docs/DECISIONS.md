@@ -17,6 +17,7 @@ Why the app is the way it is. Read this before changing behaviour, so settled qu
 | 0.5 | **Update safety = SHA-256 checksum + same signing certificate** as the running app; links only from this repo's releases | Same idea as couch-lab 2.5.2. The checksum catches corruption; the certificate check is the real protection |
 | 0.5 | **Repo is public** (MIT) | Lets the app read releases without a token, and gives free CI minutes. Mac CI minutes cost 10× on private repos. Nothing secret is in the code; certificates live in Actions secrets |
 | 0.5 | **Self-signed certificates** for both platforms, kept in Actions secrets with an offline backup | Free. A stable certificate keeps macOS's Screen Recording permission across updates (0.4's ad-hoc signing lost it on every rebuild) and lets MSIX updates install over each other. A paid Apple or Windows certificate is only needed to remove first-install warnings for other people |
+| 0.5 | **Certificates are made by `tools/make-certs.sh` in a Codespace** and proven by the "Check signing" workflow; the manual Mac/PC steps are the fallback | One script, no clicking on two machines, secrets set automatically. Keys made in GitHub's cloud is acceptable because they're stored in GitHub secrets anyway. Exported in the classic 3DES format so macOS can import them |
 | 0.5 | **Windows installs as MSIX** | Clean install and uninstall, built-in startup task, signed updates through `PackageManager` |
 | 0.5 | **Releases only when `VERSION` changes**; tags `vX.Y.Z`; one version for both apps | Every push builds and tests, but users only see real versions. One number avoids "Mac 0.5 vs Windows 0.5.3" confusion |
 | 0.5 | **Version restarts at 0.5.0** | Ashwin's choice; follows the 0.4 macOS app |
@@ -54,3 +55,4 @@ Why the app is the way it is. Read this before changing behaviour, so settled qu
 5. **Never commit signing keys or passwords**, even to a private repo. Deleting a file doesn't remove it from git history; a leaked key must be replaced.
 6. **CI errors are invisible without annotations.** Keep the `::error::` steps.
 7. **Hard-coded Documents paths break with OneDrive.** Always ask Windows for the Documents known folder.
+8. **OpenSSL 3's default `.p12` encryption (AES) can't be imported on some macOS versions.** Export with `-keypbe PBE-SHA1-3DES -certpbe PBE-SHA1-3DES -macalg sha1`, and check the result.

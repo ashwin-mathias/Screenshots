@@ -27,3 +27,6 @@ dist/
 *.keychain
 *.keychain-db
 review/
+
+# Output of tools/make-certs.sh (private keys) — download, then delete
+.signing-backup/
