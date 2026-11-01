@@ -43,7 +43,7 @@ windows/
                             HelpAboutWindow, StartupTaskController, Settings, Updater, UpdateInstaller
   tests/CaptureSupport.Tests/
   packaging/AppxManifest.xml, Images/
-  scripts/build-msix.ps1, make-cert.ps1
+  scripts/build-msix.ps1
 tools/make-icons.py         generates shared/assets/icon/*
 .github/workflows/build.yml
 ```
@@ -162,14 +162,14 @@ tools/make-icons.py         generates shared/assets/icon/*
 
 ## 8. Signing, CI and releases
 
-### Certificates (created once by Ashwin; steps in README)
+### Certificates (created once by Ashwin; step-by-step in [SIGNING.md](SIGNING.md))
 - **macOS:**
   - A self-signed **Code Signing** certificate named "Screenshot Signing (Ashwin Mathias)", made in Keychain Access → Certificate Assistant → Create a Certificate (type: Code Signing), valid 10 years.
   - Export it as `.p12`.
   - Secrets: `MACOS_CERT_P12_BASE64`, `MACOS_CERT_PASSWORD`.
 - **Windows:**
-  - `pwsh windows/scripts/make-cert.ps1` runs `New-SelfSignedCertificate -Type CodeSigningCert -Subject "CN=Ashwin Mathias" -KeyUsage DigitalSignature -NotAfter (10 years)`.
-  - It exports the `.pfx` (private) and `.cer` (public).
+  - `New-SelfSignedCertificate` with subject `CN=Ashwin Mathias`, the code-signing EKU, RSA 3072, valid 10 years (exact commands in SIGNING.md).
+  - Export the `.pfx` (private) and `.cer` (public). CI exports the public `.cer` again from the `.pfx` for each release.
   - Secrets: `WINDOWS_CERT_PFX_BASE64`, `WINDOWS_CERT_PASSWORD`, `WINDOWS_CERT_THUMBPRINT`.
 - **Keep an offline backup of both private files.**
   - A lost or replaced Windows certificate means a new publisher, so every PC must uninstall and reinstall.

@@ -7,6 +7,7 @@
 | [ARCHITECTURE.md](ARCHITECTURE.md) | How it's built: stack, repo layout, components, shared test cases, packaging, signing, CI |
 | [DECISIONS.md](DECISIONS.md) | Why: settled decisions, open questions and lessons from past bugs |
 | [ACCEPTANCE.md](ACCEPTANCE.md) | How to prove it works: automated tests, device checklist and regression tests |
+| [SIGNING.md](SIGNING.md) | How to create, store, back up and replace the signing certificates |
 | [REBUILD_PROMPT.md](REBUILD_PROMPT.md) | The prompt for building the app from these docs |
 
 - Every release updates the affected docs **in the same commit** as the code.
