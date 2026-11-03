@@ -169,4 +169,12 @@ Private: no account, no ads, no tracking, no internet connection
 3. The tray menu open, with Recent Screenshots.
 4. Help & About, showing the Sparky card.
 
-**Store logos:** optional. Partner Center uses the package logos. If it asks, use `shared/assets/icon/AppIcon-1024.png` (resize to 300 × 300 for the "1:1 box art").
+**Store logos** (Store listings → Store logos), all in `shared/assets/icon/store/` and made by `tools/make-icons.py`:
+
+| Partner Center slot | File |
+|---|---|
+| 1:1 box art (shown on the Store page; recommended) | `Screenshotz-box-art-2160x2160.png` |
+| 2:3 poster art (optional) | `Screenshotz-poster-art-1440x2160.png` |
+| 1:1 app tile icon, 300 × 300 (optional) | `Screenshotz-tile-icon-300x300.png` |
+
+The icons in Start and the taskbar come from the package itself, so nothing else needs uploading.

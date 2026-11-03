@@ -6,7 +6,7 @@ Run once after changing the design, then commit the output:
 Needs Pillow (pip install pillow). Output goes to shared/assets/icon/.
 """
 from pathlib import Path
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 OUT = Path(__file__).resolve().parent.parent / "shared" / "assets" / "icon"
 TOP_LEFT = (0x2F, 0x6F, 0xE4)      # blue
@@ -91,6 +91,28 @@ def tray_icon(px, color, check=False):
     return img.resize((px, px), Image.LANCZOS)
 
 
+def store_art(w, h, wordmark=False):
+    """Full-bleed artwork for the Store listing (box art, poster art): gradient, glyph, optional name."""
+    n_w, n_h = w * 2, h * 2  # 2x supersampling is enough at these sizes
+    img = gradient(256).resize((n_w, n_h), Image.BICUBIC).convert("RGBA")
+    d = ImageDraw.Draw(img)
+    side = min(n_w, n_h) * (0.42 if not wordmark else 0.46)
+    cx, cy = n_w / 2, (n_h * 0.42 if wordmark else n_h / 2)
+    glyph(d, (cx - side / 2, cy - side / 2, cx + side / 2, cy + side / 2), (255, 255, 255, 255), side * 0.085 / 0.56)
+    if wordmark:
+        font = None
+        for path in ("/usr/share/fonts/opentype/inter/Inter-SemiBold.otf", "/Library/Fonts/Inter-SemiBold.otf",
+                     "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"):
+            if Path(path).exists():
+                font = ImageFont.truetype(path, int(n_w * 0.115))
+                break
+        font = font or ImageFont.load_default()
+        text = "Screenshotz"
+        box = d.textbbox((0, 0), text, font=font)
+        d.text(((n_w - (box[2] - box[0])) / 2 - box[0], cy + side / 2 + n_h * 0.09), text, font=font, fill=(255, 255, 255, 255))
+    return img.convert("RGB").resize((w, h), Image.LANCZOS)
+
+
 def main():
     mac = OUT / "macos"
     win = OUT / "windows"
@@ -139,6 +161,12 @@ def main():
             name = f"tray-{'check' if check else 'viewfinder'}-{'onDark' if theme == 'light' else 'onLight'}.ico"
             frames[-1].save(tray / name, sizes=[(16, 16), (20, 20), (24, 24), (32, 32)],
                             append_images=frames[:-1])
+    # Microsoft Store listing images (docs/STORE.md): tile icon, 1:1 box art, 2:3 poster art.
+    store = OUT / "store"
+    store.mkdir(parents=True, exist_ok=True)
+    app_icon(300, 0.04, shadow=False).save(store / "Screenshotz-tile-icon-300x300.png")
+    store_art(2160, 2160).save(store / "Screenshotz-box-art-2160x2160.png", optimize=True)
+    store_art(1440, 2160, wordmark=True).save(store / "Screenshotz-poster-art-1440x2160.png", optimize=True)
     print(f"Wrote icons to {OUT}")
 
 
