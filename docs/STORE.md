@@ -59,6 +59,72 @@ These are built into the Store package by `build-msix.ps1 -Channel store`. None 
 
 **Description (Paste):**
 ```
+Screenshot it. Paste it. Keep it.
+
+Press Alt+S, drag across anything on your screen, and Screenshotz does two things at once: it saves a crisp PNG to your Documents\screenshots folder and puts the image on your clipboard. The moment you let go of the mouse, it's ready to paste into an email, a chat or a slide.
+
+No editor popping up. No "Save as" box. No hunting for where the file went.
+
+WHY YOU'LL LOVE IT
+• One shortcut, two results: an image ready to paste right now, and a file you'll still have next month
+• Never breaks your flow: a small preview slides into the corner without taking your cursor, so you keep typing and paste straight away
+• Find it again in one click: Recent Screenshots lists your newest 20 captures, each with Copy, Open, Show in File Explorer and Mark Up
+• Sharp on every monitor: captured at full resolution, whatever the display's scaling
+• Your files are safe: every capture gets its own name, and nothing is ever overwritten or deleted
+• Mark it up when you need to: open any screenshot in Paint with one click
+• Your shortcut, your way: Alt+S by default, add Print Screen if you prefer, or turn either off
+• Out of the way: lives quietly in the system tray and can start when you sign in
+
+PRIVATE BY DESIGN
+No account. No ads. No tracking. Screenshotz never connects to the internet. Your screenshots stay on your PC.
+
+PERFECT FOR
+• Pasting snippets into Teams, Slack, Outlook and Word
+• Saving receipts, confirmations and error messages
+• Building slides, documents and bug reports
+• Anyone who takes more than a few screenshots a day
+
+Made with love for Sparky, who always camps out where I work.
+```
+
+**What's new in this version** from `shared/changelog.json`.
+5. **Submit for certification.** It usually takes 1–3 business days. Windows then updates installed copies by itself.
+
+## First submission: section by section
+
+### Pricing and availability
+- Markets: all, or the ones you choose.
+- Visibility: **Public audience**. To test first, choose **Private audience** and add your own email.
+- Pricing: **Free**. No free trial.
+
+### Properties
+- Category: **Utilities + tools**. Subcategory, if offered: none.
+- Privacy policy URL: **Paste** `https://github.com/ashwin-mathias/Screenshots/blob/main/PRIVACY.md`
+- Website: **Paste** `https://github.com/ashwin-mathias/Screenshots`
+- Support contact: **Paste** `https://github.com/ashwin-mathias/Screenshots/issues`
+- Product declarations:
+  - ☐ accessibility guidelines: leave unticked until the Narrator checks in ACCEPTANCE F5 pass;
+  - ☐ customers can install to alternate drives: leave unticked;
+  - ☐ depends on non-Microsoft drivers or NT services: leave unticked.
+- System requirements: Minimum: **Keyboard** and **Mouse**. The selection is made with the mouse.
+
+### Age ratings
+- Category: **Utility**.
+- Answer **No** to every question: no user-generated content shared, no chat, no location sharing, no purchases, no violence and so on. Screenshotz has no online features.
+- Expected result: rated for everyone (IARC 3+ / ESRB E).
+
+### Packages
+- Upload `Screenshotz-store-x64.msixupload`. Device family: **Windows 10/11 Desktop**.
+
+### Submission options → Restricted capabilities
+- The package declares `runFullTrust`. Every classic desktop app needs it.
+- **Paste:**
+  > Screenshotz is a desktop app (WPF / .NET) packaged as MSIX. runFullTrust is required to register its global keyboard shortcut (RegisterHotKey), to show its notification-area icon (Shell_NotifyIcon), to capture the screen area the user selects, and to write the image to the clipboard and the user's Documents\screenshots folder. It makes no network requests and collects no data.
+
+### Store listing (English)
+
+**Description (Paste):**
+```
 Screenshotz captures an area of your screen and puts it in two places at once: a PNG file in Documents\screenshots, and an image on your clipboard, ready to paste.
 
 Press Alt+S, drag across what you want, and paste it into Word, Teams, Outlook, Slack or anywhere else that takes images. The original file is kept, never overwritten and never uploaded.
@@ -81,15 +147,17 @@ First release on Windows: capture with Alt+S, save and copy in one step, floatin
 
 **Product features (Paste, one per line):**
 ```
-Capture an area with Alt+S
-Saves a PNG and copies the image in one step
-Preview that never takes your typing focus
-Recent Screenshots with Copy, Reveal and Mark Up
-Full-resolution captures on every display
-No account, no tracking, no network access
+Alt+S: select an area, saved as a PNG and copied to your clipboard in one step
+Floating preview that never takes your typing focus
+Recent Screenshots: your newest 20 captures, one click away
+Full-resolution captures on every monitor, whatever its scaling
+Nothing is ever overwritten or deleted
+Mark up any screenshot in Paint with one click
+Optional Print Screen shortcut
+Private: no account, no ads, no tracking, no internet connection
 ```
 
-**Short description (Paste):** `Capture an area: saved as a PNG and copied to your clipboard.`
+**Short description (Paste):** `Screenshot it. Paste it. Keep it. Press Alt+S: your selection is saved as a PNG and copied to your clipboard, ready to paste.`
 
 **Keywords (Paste, up to 7):** `screenshot`, `screen capture`, `snipping`, `clipboard`, `PNG`, `snip`, `capture`
 
